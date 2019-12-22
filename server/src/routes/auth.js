@@ -13,6 +13,7 @@ import User from "../models/User";
 export default passport => {
   const router = express.Router();
   const redirect_uri = `${process.env.SERVER_URL}/auth/spotify/callback`;
+
   // Client request to login starts spotify OAuth flow.
   router.get("/login", (req, res) => {
     var scope = "playlist-read-collaborative streaming";
@@ -27,14 +28,12 @@ export default passport => {
 
   // Receive callback from spotify OAuth
   router.get("/spotify/callback", (req, res) => {
-    console.log("im back");
-    const code = req.query.code || null;
-
+    // Exchange received authorization code for tokens.
     axios
       .post(
         "https://accounts.spotify.com/api/token",
         qs.stringify({
-          code: code,
+          code: req.query.code,
           grant_type: "authorization_code",
           redirect_uri: redirect_uri // redirect to home page
         }),
@@ -50,7 +49,7 @@ export default passport => {
         const refreshToken = authResp.data.refresh_token;
         const tokenExp = Date.now() + authResp.data.expires_in * 1000;
 
-        // Get user information
+        // Use tokens to get user profile from spotify
         return axios
           .get("https://api.spotify.com/v1/me", {
             headers: {
@@ -86,18 +85,13 @@ export default passport => {
           });
       })
       .then(user => {
-        console.log("user");
-        console.log(user);
         const privateKey = fs.readFileSync("./secrets/jwt_private.key", "utf8");
         const user_jwt = jwt.sign({ sub: user._id }, privateKey, {
           algorithm: "RS256"
         });
-        console.log(user_jwt);
-        console.log(`time for the client!! ${user.displayName}`);
         return res.redirect(`${process.env.CLIENT_URL}/?token=${user_jwt}`);
       })
       .catch(err => {
-        console.log(err);
         return res.redirect(`${process.env.CLIENT_URL}/?err=${err}`);
       });
   });
