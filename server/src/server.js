@@ -1,14 +1,16 @@
 import express from "express";
+import fs from "fs";
 import mongoose from "mongoose";
 import passport from "passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 
 import authRouter from "./routes/auth";
+import User from "./models/User";
 
 // Connect MongoDB
 const dbUser = process.env.MONGO_USER;
 const dbPassword = process.env.MONGO_PASSWORD;
-const uri = `mongodb+srv://${dbUser}:${dbPassword}@organized-music-xt0uh.mongodb.net/test?retryWrites=true&w=majorityprocess.env.MONGO_URI`;
+const uri = `mongodb+srv://${dbUser}:${dbPassword}@organized-music-xt0uh.mongodb.net/test?retryWrites=true&w=majority`;
 mongoose
   .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB connected"));
@@ -27,9 +29,11 @@ const allowCrossDomain = (req, res, next) => {
 app.use(allowCrossDomain);
 
 // Initialize passport
+const publicKey = fs.readFileSync("./secrets/jwt_public.key", "utf8");
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET_WEB_TOKEN
+  secretOrKey: publicKey,
+  algorithms: ["RS256"]
 };
 passport.use(
   new Strategy(jwtOptions, (payload, done) => {

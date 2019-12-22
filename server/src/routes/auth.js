@@ -4,40 +4,38 @@
 
 import axios from "axios";
 import express from "express";
+import fs from "fs";
 import { getSpotifyAuthHeader } from "../util";
 import jwt from "jsonwebtoken";
 import qs from "qs";
 import User from "../models/User";
 
-const router = express.Router();
-const redirect_uri = `${process.env.SERVER_URL}/auth/spotify/callback`;
-
 export default passport => {
+  const router = express.Router();
+  const redirect_uri = `${process.env.SERVER_URL}/auth/spotify/callback`;
+
   // Client request to login starts spotify OAuth flow.
   router.get("/login", (req, res) => {
     var scope = "playlist-read-collaborative streaming";
     res.redirect(
       "https://accounts.spotify.com/authorize?" +
-        qs.stringify({
-          response_type: "code",
-          client_id: process.env.SPOTIFY_CLIENT_ID,
-          redirect_uri,
-          scope
-        })
+        `client_id=${process.env.SPOTIFY_CLIENT_ID}` +
+        `&response_type=code` +
+        `&redirect_uri=${redirect_uri}` +
+        `&scope=${scope}`
     );
   });
 
   // Receive callback from spotify OAuth
   router.get("/spotify/callback", (req, res) => {
-    const code = req.query.code || null;
-
+    // Exchange received authorization code for tokens.
     axios
       .post(
-        "https://acounts.spotify.com/api/token",
+        "https://accounts.spotify.com/api/token",
         qs.stringify({
-          code,
-          redirect_uri,
-          grant_type: "authorization_code"
+          code: req.query.code,
+          grant_type: "authorization_code",
+          redirect_uri: redirect_uri // redirect to home page
         }),
         {
           headers: {
@@ -51,43 +49,46 @@ export default passport => {
         const refreshToken = authResp.data.refresh_token;
         const tokenExp = Date.now() + authResp.data.expires_in * 1000;
 
-        // Get user information
-        return axios.get("https://api.spotify.com/v1/me", {
-          headers: {
-            Authorization: `Bearer ${tokenResp.data.access_token}`
-          }
-        });
-      })
-      .then(profileResp => {
-        const spotifyId = profileResp.data.id;
-        // Search DB for user
-        var user = User.find({ spotifyId });
+        // Use tokens to get user profile from spotify
+        return axios
+          .get("https://api.spotify.com/v1/me", {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          })
+          .then(profileResp => {
+            const spotifyId = profileResp.data.id;
 
-        // Create a new user
-        if (!user) {
-          user = new User({
-            spotifyAuth: {
-              accessToken,
-              refreshToken,
-              tokenExpAt
-            },
-            spotifyId: profileResp.data.id,
-            displayName: spotifyMeResp.data.display_name,
-            profileImage: spotifyMeResp.data.images[0],
-            profileUrl: spotifyMeResp.data.external_urls.spotify,
-            spotifyApiUrl: spotifyMeResp.data.href
+            // Search DB for user
+            return User.find({ spotifyId }).then(userArr => {
+              const [user] = userArr;
+
+              if (user) return user;
+
+              // Create a new user
+              const newUser = new User({
+                spotifyAuth: {
+                  accessToken,
+                  refreshToken,
+                  tokenExp
+                },
+                spotifyId: profileResp.data.id,
+                displayName: profileResp.data.display_name,
+                profileImage: profileResp.data.images[0],
+                profileUrl: profileResp.data.external_urls.spotify,
+                spotifyApiUrl: profileResp.data.href
+              });
+              newUser.save();
+
+              return newUser;
+            });
           });
-          user.save();
-        }
-
-        return user;
       })
       .then(user => {
-        const user_jwt = jwt.sign(
-          { sub: user._id },
-          process.env.SECRET_WEB_TOKEN,
-          { algorithm: "RS256" }
-        );
+        const privateKey = fs.readFileSync("./secrets/jwt_private.key", "utf8");
+        const user_jwt = jwt.sign({ sub: user._id }, privateKey, {
+          algorithm: "RS256"
+        });
         return res.redirect(`${process.env.CLIENT_URL}/?token=${user_jwt}`);
       })
       .catch(err => {
