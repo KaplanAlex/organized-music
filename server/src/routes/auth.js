@@ -46,8 +46,12 @@ export default passport => {
       )
       .then(authResp => {
         const accessToken = authResp.data.access_token;
-        const refreshToken = authResp.data.refresh_token;
-        const tokenExp = Date.now() + authResp.data.expires_in * 1000;
+
+        const spotifyAuth = {
+          accessToken: accessToken,
+          refreshToken: authResp.data.refresh_token,
+          tokenExp: Date.now() + authResp.data.expires_in * 1000
+        };
 
         // Use tokens to get user profile from spotify
         return axios
@@ -63,15 +67,16 @@ export default passport => {
             return User.find({ spotifyId }).then(userArr => {
               const [user] = userArr;
 
-              if (user) return user;
+              if (user) {
+                console.log("updating token");
+                user.spotifyAuth = spotifyAuth;
+                user.save();
+                return user;
+              }
 
               // Create a new user
               const newUser = new User({
-                spotifyAuth: {
-                  accessToken,
-                  refreshToken,
-                  tokenExp
-                },
+                spotifyAuth,
                 spotifyId: profileResp.data.id,
                 displayName: profileResp.data.display_name,
                 profileImage: profileResp.data.images[0],
@@ -116,14 +121,6 @@ export default passport => {
         res.send({ access_token: refreshResp.data.access_token });
       });
   });
-
-  router.get(
-    "/user",
-    passport.authenticate("jwt", { session: false }),
-    (req, res) => {
-      return res.json({ user: req.user });
-    }
-  );
 
   return router;
 };

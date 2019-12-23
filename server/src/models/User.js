@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import Tag from "./Tag";
+
+const tagSchema = Tag.schema;
 
 const userSchema = new mongoose.Schema({
   spotifyAuth: {
@@ -40,6 +43,10 @@ const userSchema = new mongoose.Schema({
   },
   spotifyApiUrl: {
     type: String
+  },
+  tags: {
+    type: [tagSchema],
+    default: []
   }
 });
 

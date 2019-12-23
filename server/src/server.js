@@ -5,6 +5,9 @@ import passport from "passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 
 import authRouter from "./routes/auth";
+import userRouter from "./routes/user";
+import tagRouter from "./routes/tag";
+
 import User from "./models/User";
 
 // Connect MongoDB
@@ -54,5 +57,7 @@ passport.use(
 
 // Include routes
 app.use("/auth", authRouter(passport));
+app.use("/user", passport.authenticate("jwt", { session: false }), userRouter);
+app.use("/tag", passport.authenticate("jwt", { session: false }), tagRouter);
 
 export default app;
