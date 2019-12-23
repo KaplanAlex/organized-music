@@ -10,7 +10,19 @@ module.exports = {
   devServer: { contentBase: parentDir, historyApiFallback: true, port: 3000 },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, exclude: /node_modules/, use: ["babel-loader"] }
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+      },
+      {
+        test: /\.less$/,
+        loaders: ["style-loader", "css-loader", "less-loader"]
+      },
+      {
+        test: /\.css$/,
+        loaders: ["style-loader", "css-loader"]
+      }
     ]
   }
 };
