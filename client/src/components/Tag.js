@@ -9,11 +9,12 @@ const StyledDiv = styled.div`
   padding-right: 10px;
   padding-left: 10px;
   margin-right: 10px;
+  margin-bottom: 5px;
 
   border-radius: 10px;
-
-  background-color: #42aaf5;
-  color: #ffffff;
+  border: 1px solid #e6e6e6;
+  /* background-color: #42aaf5; */
+  /* color: #ffffff; */
 `;
 
 const StyledButton = styled.button`
@@ -22,7 +23,7 @@ const StyledButton = styled.button`
   outline: none;
   pointer-events: auto;
   background-color: transparent;
-  color: #ffffff;
+  /* color: #ffffff; */
   padding-bottom: 10px;
   border: 0;
   padding: 0;
