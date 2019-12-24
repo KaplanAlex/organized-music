@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/KaplanAlex/organized-music#readme",
   "dependencies": {
+    "@emotion/babel-preset-css-prop": "^10.0.27",
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
     "css-loader": "^3.4.0",
     "less-loader": "^5.0.0",
     "react": "^16.12.0",
