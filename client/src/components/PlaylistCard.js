@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
 import Card from "./Card";
 import Flex from "./Flex";
+import Tag from "./Tag";
 
 const StyledImage = styled.div`
   max-height: 200px;
@@ -45,12 +46,24 @@ const StyledText = styled.div`
   justify-content: flex-start;
 `;
 
+const TagDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  max-width: 200px;
+`;
+
 const PlaylistCard = () => {
+  const [tags, setTags] = useState(["Rap", "Classic", "Vocal"]);
+  const clearTag = idx => {
+    setTags(tags.filter(t => tags.indexOf(t) !== idx));
+  };
   return (
     <StyledCard>
       <StyledFlex>
         <StyledImage>
-          <StyledImageNoDrag src={"../static/Section.80.jpeg"} />
+          <StyledImageNoDrag src={"../../static/Section.80.jpeg"} />
         </StyledImage>
         <StyledText>Liked from radio</StyledText>
         <StyledText
@@ -60,6 +73,11 @@ const PlaylistCard = () => {
         >
           This is the information about the playlist that is displayed
         </StyledText>
+        <TagDiv>
+          {tags.map((tag, index) => (
+            <Tag key={index} value={tag} onClear={() => clearTag(index)} />
+          ))}
+        </TagDiv>
       </StyledFlex>
     </StyledCard>
   );
