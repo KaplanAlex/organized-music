@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
+
+import Playlist from "./Playlist";
 import Tag from "./Tag";
 
+const playlistSchema = Playlist.schema;
 const tagSchema = Tag.schema;
 
 const userSchema = new mongoose.Schema({
@@ -19,12 +22,11 @@ const userSchema = new mongoose.Schema({
     }
   },
   spotifyId: {
-    // this is the spotify "username"
-    type: String, // is this what we call a spotify username??
+    type: String,
     required: true
   },
   displayName: {
-    type: String, // not all users have this, it defaults to their id/username
+    type: String,
     required: true
   },
   profileImage: {
@@ -46,6 +48,10 @@ const userSchema = new mongoose.Schema({
   },
   tags: {
     type: [tagSchema],
+    default: []
+  },
+  playlists: {
+    type: [playlistSchema],
     default: []
   }
 });

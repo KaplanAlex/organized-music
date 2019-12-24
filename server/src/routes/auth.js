@@ -70,7 +70,7 @@ export default passport => {
               const [user] = userArr;
 
               if (user) {
-                console.log("updating token");
+                // Update oauth tokens
                 user.spotifyAuth = spotifyAuth;
                 user.save();
                 return user;

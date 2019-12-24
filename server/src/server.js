@@ -5,8 +5,9 @@ import passport from "passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 
 import authRouter from "./routes/auth";
-import userRouter from "./routes/user";
+import playlistRouter from "./routes/playlist";
 import tagRouter from "./routes/tag";
+import userRouter from "./routes/user";
 
 import User from "./models/User";
 
@@ -59,5 +60,10 @@ passport.use(
 app.use("/auth", authRouter(passport));
 app.use("/user", passport.authenticate("jwt", { session: false }), userRouter);
 app.use("/tag", passport.authenticate("jwt", { session: false }), tagRouter);
+app.use(
+  "/playlist",
+  passport.authenticate("jwt", { session: false }),
+  playlistRouter
+);
 
 export default app;
