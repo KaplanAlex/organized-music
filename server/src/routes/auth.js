@@ -103,15 +103,16 @@ export default passport => {
       });
   });
 
-  router.get("/refreshToken", (req, res) => {
-    const { user } = req;
-    const { refreshToken } = user.spotifyAuth;
-    const refreshResp = refreshOauth(refreshToken);
-
-    if (refreshResp.accessToken) return res.send(refreshResp.accessToken);
-
-    return res.status(401).send({ err: resp.err });
-  });
+  router.get(
+    "/refreshToken",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+      const { user } = req;
+      refreshOauth(user)
+        .then(() => res.send(user))
+        .catch(err => res.send(err));
+    }
+  );
 
   return router;
 };
