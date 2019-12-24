@@ -1,5 +1,6 @@
 import { Router } from "express";
-import axios from "axios";
+
+import { spotifyReq } from "../util/auth";
 
 const router = Router();
 
@@ -7,23 +8,17 @@ router.get("/", (req, res) => {
   return res.json({ user: req.user });
 });
 
-router.get("/search", (req, res) => {
+router.get("/playlists", (req, res) => {
   const { user } = req;
-  const { q: search_val, tags } = req.query;
-  const { accessToken } = user.spotifyAuth;
 
-  axios
-    .get("https://api.spotify.com/v1/me/playlists", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
+  spotifyReq(
+    { method: "get", url: "https://api.spotify.com/v1/me/playlists" },
+    user
+  )
+    .then(resp => {
+      return res.send(resp);
     })
-    .then(spotifyResp => {
-      console.log(spotifyResp.data);
-    })
-    .catch(err => console.log(err));
-
-  res.send({ msg: search_val });
+    .catch(err => res.send(err));
 });
 
 export default router;

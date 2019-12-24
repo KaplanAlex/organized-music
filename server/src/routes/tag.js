@@ -13,6 +13,12 @@ router.get("/", (req, res) => {
   return res.send({ tags: user.tags });
 });
 
+/**
+ * POST "/tag/"
+ * Body: {tag: {value: "name"}}
+ * Create a new tag object in the database and link it
+ * to the user.
+ */
 router.post("/", (req, res) => {
   const { user } = req;
   const { tag } = req.body;

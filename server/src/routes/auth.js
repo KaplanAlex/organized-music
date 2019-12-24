@@ -5,9 +5,11 @@
 import axios from "axios";
 import express from "express";
 import fs from "fs";
-import { getSpotifyAuthHeader } from "../util";
 import jwt from "jsonwebtoken";
 import qs from "qs";
+
+import { getSpotifyAuthHeader, refreshOauth } from "../util/auth";
+
 import User from "../models/User";
 
 export default passport => {
@@ -101,25 +103,14 @@ export default passport => {
       });
   });
 
-  router.get("/refresh_token", (req, res) => {
-    const { refresh_token } = req.body;
-    axios
-      .post(
-        "https://acounts.spotify.com/api/token",
-        qs.stringify({
-          refresh_token,
-          grant_type: "refresh_token"
-        }),
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: getSpotifyAuthHeader()
-          }
-        }
-      )
-      .then(refreshResp => {
-        res.send({ access_token: refreshResp.data.access_token });
-      });
+  router.get("/refreshToken", (req, res) => {
+    const { user } = req;
+    const { refreshToken } = user.spotifyAuth;
+    const refreshResp = refreshOauth(refreshToken);
+
+    if (refreshResp.accessToken) return res.send(refreshResp.accessToken);
+
+    return res.status(401).send({ err: resp.err });
   });
 
   return router;
