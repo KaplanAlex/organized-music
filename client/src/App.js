@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { css } from "@emotion/core";
+
+import SignIn from "./pages/SignIn";
 import Button from "./components/Button";
 import Container from "./components/Container";
-import Row from "react-bootstrap/Row";
 import PlaylistCard from "./components/PlaylistCard";
-
-import { css } from "@emotion/core";
 import Flex from "./components/Flex";
 
 const App = () => {
-  return (
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/user", { withCredentials: true })
+      .then(user => {
+        console.log(user);
+        setUser(user);
+      })
+      .catch(err => {
+        setUser(null);
+        console.log(err);
+      });
+  }, []);
+  const [user, setUser] = useState(null);
+  return user ? (
     <Container
       full
       css={css`
@@ -16,14 +30,6 @@ const App = () => {
       `}
     >
       Lets start tagging!
-      <Button
-        onClick={() =>
-          window.location.replace("http://localhost:5000/auth/login")
-        }
-        inverse
-      >
-        Login with spotify
-      </Button>
       <Button
         onClick={() => window.location.replace("http://localhost:5000/user")}
         inverse
@@ -41,6 +47,8 @@ const App = () => {
         <PlaylistCard />
       </Flex>
     </Container>
+  ) : (
+    <SignIn />
   );
 };
 
