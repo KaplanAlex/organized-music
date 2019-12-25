@@ -1,15 +1,13 @@
+import cookieParser from "cookie-parser";
 import express from "express";
-import fs from "fs";
 import mongoose from "mongoose";
 import passport from "passport";
-import { Strategy, ExtractJwt } from "passport-jwt";
 
 import authRouter from "./routes/auth";
 import playlistRouter from "./routes/playlist";
 import tagRouter from "./routes/tag";
 import userRouter from "./routes/user";
-
-import User from "./models/User";
+import { passportStrategy } from "./passport";
 
 // Connect MongoDB
 const dbUser = process.env.MONGO_USER;
@@ -17,7 +15,8 @@ const dbPassword = process.env.MONGO_PASSWORD;
 const uri = `mongodb+srv://${dbUser}:${dbPassword}@organized-music-xt0uh.mongodb.net/test?retryWrites=true&w=majority`;
 mongoose
   .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB connected"));
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.log("MongoDB connection error", err));
 
 // Initialize express server
 const app = express();
@@ -32,29 +31,9 @@ const allowCrossDomain = (req, res, next) => {
 };
 app.use(allowCrossDomain);
 
-// Initialize passport
-const publicKey = fs.readFileSync("./secrets/jwt_public.key", "utf8");
-const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: publicKey,
-  algorithms: ["RS256"]
-};
-passport.use(
-  new Strategy(jwtOptions, (payload, done) => {
-    User.findById(payload.sub)
-      .then(user => {
-        if (user) {
-          done(null, user);
-        } else {
-          done(null, false);
-        }
-      })
-      .catch(err => {
-        console.log("jwt strategy error:", err);
-        done(err);
-      });
-  })
-);
+// Initialize passport - cookieparser for retreiving jwt.
+app.use(cookieParser());
+passport.use(passportStrategy);
 
 // Include routes
 app.use("/auth", authRouter(passport));

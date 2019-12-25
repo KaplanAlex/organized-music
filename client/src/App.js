@@ -15,7 +15,21 @@ const App = () => {
         background-color: #f3f3f3;
       `}
     >
-      <Row>Lets start tagging!</Row>
+      Lets start tagging!
+      <Button
+        onClick={() =>
+          window.location.replace("http://localhost:5000/auth/login")
+        }
+        inverse
+      >
+        Login with spotify
+      </Button>
+      <Button
+        onClick={() => window.location.replace("http://localhost:5000/user")}
+        inverse
+      >
+        Get User from accessToken
+      </Button>
       <Flex>
         <PlaylistCard />
         <PlaylistCard />
@@ -26,14 +40,6 @@ const App = () => {
         <PlaylistCard />
         <PlaylistCard />
       </Flex>
-      <Button
-        onClick={() =>
-          window.location.replace("http://localhost:5000/auth/login")
-        }
-        inverse
-      >
-        Login with spotify
-      </Button>
     </Container>
   );
 };

@@ -96,7 +96,9 @@ export default passport => {
         const user_jwt = jwt.sign({ sub: user._id }, privateKey, {
           algorithm: "RS256"
         });
-        return res.redirect(`${process.env.CLIENT_URL}/?token=${user_jwt}`);
+        // httpOnly - will not be displayed with document.getCookie on client side
+        res.cookie("jwt", user_jwt, { maxAge: 900000, httpOnly: true });
+        return res.redirect(`${process.env.CLIENT_URL}/`);
       })
       .catch(err => {
         return res.redirect(`${process.env.CLIENT_URL}/?err=${err}`);
