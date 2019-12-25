@@ -19,10 +19,18 @@ const App = () => {
       .catch(err => {
         setUser(null);
         console.log(err);
+      })
+      .then(() => {
+        console.log("Always execute!");
+        setLoading(false);
       });
   }, []);
   const [user, setUser] = useState(null);
-  return user ? (
+  const [loading, setLoading] = useState(true);
+
+  return loading ? (
+    ""
+  ) : user ? (
     <Container
       full
       css={css`
