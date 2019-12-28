@@ -9,19 +9,18 @@ import PlaylistCard from "./components/PlaylistCard";
 import Flex from "./components/Flex";
 
 const App = () => {
+  // Validate login with request for user.
   useEffect(() => {
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
       .then(user => {
-        console.log(user);
         setUser(user);
       })
       .catch(err => {
         setUser(null);
-        console.log(err);
+        console.log("Fetch user err", err);
       })
       .then(() => {
-        console.log("Always execute!");
         setLoading(false);
       });
   }, []);
