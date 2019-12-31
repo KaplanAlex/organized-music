@@ -21,13 +21,13 @@ const StyledDivContainer = styled.div`
 
 const StyledDiv = styled.div`
   background-color: #ffffff;
-  position: relative;
-  margin: 0px 0px 0px 0px;
-  padding: 0pc 0px 0px 0px;
   display: flex;
   align-items: stretch;
   flex-grow: 1;
   flex: 1;
+  @media (max-width: 850px) {
+    flex-direction: column;
+  }
 `;
 
 const StyledLoginContainer = styled.div`
@@ -36,13 +36,9 @@ const StyledLoginContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
-  margin: 0px 0px 0px 0px;
-  padding: 0pc 0px 0px 0px;
-  position: relative;
 `;
 
 const StyledLoginContent = styled.div`
-  /* width: 55%; */
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
