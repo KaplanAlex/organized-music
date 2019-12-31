@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { css } from "@emotion/core";
 
 import SignIn from "./pages/SignIn";
-import Button from "./components/Button";
-import Container from "./components/Container";
-import PlaylistCard from "./components/PlaylistCard";
-import Flex from "./components/Flex";
+import Home from "./pages/Home";
+import GlobalStyles from "./styles.js/Global";
 
 const App = () => {
   // Validate login with request for user.
@@ -14,7 +11,7 @@ const App = () => {
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
       .then(user => {
-        setUser(user);
+        setUser(user.data.user);
       })
       .catch(err => {
         setUser(null);
@@ -29,33 +26,11 @@ const App = () => {
 
   return loading ? (
     ""
-  ) : user ? (
-    <Container
-      full
-      css={css`
-        background-color: #f3f3f3;
-      `}
-    >
-      Lets start tagging!
-      <Button
-        onClick={() => window.location.replace("http://localhost:5000/user")}
-        inverse
-      >
-        Get User from accessToken
-      </Button>
-      <Flex>
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-      </Flex>
-    </Container>
   ) : (
-    <SignIn />
+    <>
+      <GlobalStyles />
+      {user ? <Home user={user} /> : <SignIn />}
+    </>
   );
 };
 
