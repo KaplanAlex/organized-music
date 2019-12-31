@@ -19,7 +19,7 @@ const StyledCard = styled.div`
   opacity: 0;
   transform: translateY(50px);
   transition: 500ms all ease-in-out;
-  margin: ${props => (props.noMargin ? 0 : "15px")};
+  
   border: 1px solid #e6e6e6;
   border-radius: 5px;
   ${props => props.animated && animatedCss}

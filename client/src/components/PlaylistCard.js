@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
 import Card from "./Card";
-import Flex from "./Flex";
 import Tag from "./Tag";
 
 const StyledImage = styled.div`
@@ -29,11 +28,14 @@ const StyledImageNoDrag = styled.img`
 
 const StyledCard = styled(Card)`
   background-color: #ffffff;
+  margin-right: 15px;
+  margin-bottom: 15px;
 `;
 
-const StyledFlex = styled(Flex)`
+const StyledFlex = styled.div`
+  display: flex;
   flex-direction: column;
-  /* align-items: center; */
+
   justify-content: center;
 `;
 

@@ -18,7 +18,7 @@ const Container = styled.div`
   padding-top: ${props => {
     if (props.fullVertical) return 0;
     if (props.small) return "15px";
-    return "25px";
+    return "4rem";
   }};
   padding-bottom: ${props => {
     if (props.fullVertical) return 0;

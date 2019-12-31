@@ -15,6 +15,11 @@ const StyledButton = styled.button`
   }};
   outline: none;
   border: none;
+  &:focus {
+    outline: none;
+
+    background: rgba(0, 0, 0, 0.25);
+  }
   cursor: pointer;
   border: 2px solid ${props => (props.secondary ? "#F7A072" : "#1ed760")};
   ${props => {
