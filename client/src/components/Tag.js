@@ -10,7 +10,7 @@ const StyledDiv = styled.div`
   padding-left: 10px;
   margin-right: 10px;
   margin-bottom: 5px;
-
+  height: 20px;
   border-radius: 10px;
   border: 1px solid #e6e6e6;
   /* background-color: #42aaf5; */

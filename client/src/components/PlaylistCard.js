@@ -54,6 +54,7 @@ const TagDiv = styled.div`
   flex-wrap: wrap;
   padding-top: 10px;
   max-width: 200px;
+  height: 55px;
 `;
 
 const PlaylistCard = () => {
