@@ -24,5 +24,8 @@ module.exports = {
         loaders: ["style-loader", "css-loader"]
       }
     ]
+  },
+  resolve: {
+    extensions: [".ts", ".tsx", ".js", ".jsx"]
   }
 };
