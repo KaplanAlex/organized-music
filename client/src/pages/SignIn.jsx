@@ -2,8 +2,58 @@ import React from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
-import Container from "../components/Container";
 import Button from "../components/Button";
+
+const SignIn = () => {
+  return (
+    <StyledDivContainer>
+      <StyledDiv>
+        <StyledMessageContainer>"Content"</StyledMessageContainer>
+        <StyledLoginContainer>
+          <StyledLoginContent>
+            <span
+              css={css`
+                align-self: flex-start;
+                font-weight: bold;
+              `}
+            >
+              Start organizing your music.
+            </span>
+            <Button
+              css={css`
+                min-width: 350px;
+                margin-top: 10px;
+                margin-bottom: 15px;
+              `}
+              pressedColor={"#138A3E"}
+              hoverColor={"#18AC4D"}
+              hoverBorder={true}
+              onClick={() =>
+                window.location.replace("http://localhost:5000/auth/login")
+              }
+            >
+              Login with Spotify
+            </Button>
+            <Button
+              css={css`
+                min-width: 350px;
+                width: 100%;
+              `}
+              onClick={() =>
+                window.location.replace("https://www.spotify.com/us/signup/")
+              }
+              inverse
+              pressedColor={"#138A3E"}
+              hoverColor={"rgba(30, 215,96, 0.1)"}
+            >
+              Sign Up for Spotify
+            </Button>
+          </StyledLoginContent>
+        </StyledLoginContainer>
+      </StyledDiv>
+    </StyledDivContainer>
+  );
+};
 
 const StyledDivContainer = styled.div`
   height: 100%;
@@ -52,51 +102,5 @@ const StyledMessageContainer = styled.div`
   position: relative;
   flex: 1;
 `;
-
-const SignIn = () => {
-  return (
-    <StyledDivContainer>
-      <StyledDiv>
-        <StyledMessageContainer>"Content"</StyledMessageContainer>
-        <StyledLoginContainer>
-          <StyledLoginContent>
-            <span
-              css={css`
-                align-self: flex-start;
-                font-weight: bold;
-              `}
-            >
-              Start organizing your music.
-            </span>
-            <Button
-              css={css`
-                min-width: 350px;
-                margin-top: 10px;
-                margin-bottom: 15px;
-              `}
-              onClick={() =>
-                window.location.replace("http://localhost:5000/auth/login")
-              }
-            >
-              Login with Spotify
-            </Button>
-            <Button
-              css={css`
-                min-width: 350px;
-                width: 100%;
-              `}
-              onClick={() =>
-                window.location.replace("https://www.spotify.com/us/signup/")
-              }
-              inverse
-            >
-              Sign Up for Spotify
-            </Button>
-          </StyledLoginContent>
-        </StyledLoginContainer>
-      </StyledDiv>
-    </StyledDivContainer>
-  );
-};
 
 export default SignIn;

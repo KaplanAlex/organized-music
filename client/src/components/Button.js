@@ -7,18 +7,35 @@ import Loader from "./Loader";
 const StyledButton = styled.button`
   border-radius: 45px;
   background-color: ${props => (props.secondary ? "#F7A072" : "#1ed760")};
-  color: #fff;
+  color: #ffffff;
   padding: 5px;
   font-size: ${props => {
     if (props.big) return "20px";
     return "16px";
   }};
-  outline: none;
+
   border: none;
   &:focus {
     outline: none;
-
-    background: rgba(0, 0, 0, 0.25);
+  }
+  &:hover {
+    ${props => {
+      if (props.hoverColor && props.hoverBorder) {
+        return `background-color: ${props.hoverColor}; border: 2px solid ${props.hoverColor}`;
+      } else if (props.hoverColor) {
+        return `background-color: ${props.hoverColor};`;
+      }
+    }}
+  }
+  &:active {
+    ${props => {
+      if (props.pressedColor)
+        return css`
+          background: ${props.pressedColor};
+          border: 2px solid ${props.pressedColor};
+          color: #ffffff;
+        `;
+    }}
   }
   cursor: pointer;
   border: 2px solid ${props => (props.secondary ? "#F7A072" : "#1ed760")};
