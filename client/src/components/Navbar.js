@@ -1,14 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
+import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
 const Navbar = ({ user }) => {
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const profileImg = user.profileImage.url;
+
+  const showSettings = event => {
+    // event.preventDefault();
+    console.log("in clicked");
+    setSettingsOpen(true);
+    document.addEventListener("click", hideSettings);
+  };
+
+  const hideSettings = event => {
+    setSettingsOpen(false);
+    document.removeEventListener("click", hideSettings);
+  };
 
   return (
     <>
       <NavBarStyle>
         <FlexContainer>
+          <a href="https://open.spotify.com/">
+            <StyledImg
+              src="../../static/Spotify_Icon_RGB_Green.png"
+              css={css`
+                margin-top: 10px;
+              `}
+            />
+          </a>
           <span
             css={css`
               color: #ffffff;
@@ -17,8 +39,32 @@ const Navbar = ({ user }) => {
             Lets start tagging!
           </span>
 
+          <ul>
+            <li>
+              <Link to="/">Search tagged</Link>
+            </li>
+            <li>
+              <Link to="/library"> All your playlists</Link>
+            </li>
+            <li>
+              <Link to="/search">Search Spotify</Link>
+            </li>
+          </ul>
+
+          {settingsOpen ? (
+            <SettingsContainer>
+              <span>Settings</span>
+              <StyledButton>Logout</StyledButton>
+            </SettingsContainer>
+          ) : null}
           <ImgBox>
-            <StyledImg src={profileImg} />
+            <StyledProfileImg
+              src={profileImg}
+              onClick={e => {
+                showSettings(e);
+                console.log("clicked");
+              }}
+            />
           </ImgBox>
         </FlexContainer>
       </NavBarStyle>
@@ -54,7 +100,26 @@ const ImgBox = styled.div`
 `;
 
 const StyledImg = styled.img`
-  border-radius: 50%;
   width: 4rem;
   height: 4rem;
+`;
+
+const StyledProfileImg = styled(StyledImg)`
+  border-radius: 50%;
+  cursor: pointer;
+`;
+
+const SettingsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 5px;
+  border-radius: 5px;
+`;
+
+const StyledButton = styled.button`
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
 `;

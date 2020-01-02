@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import SignIn from "./pages/SignIn";
-import Home from "./pages/Home";
+
 import GlobalStyles from "./styles.js/Global";
+import NavRoutes from "./NavRoutes";
 
 const App = () => {
   // Validate login with request for user.
@@ -29,7 +30,7 @@ const App = () => {
   ) : (
     <>
       <GlobalStyles />
-      {user ? <Home user={user} /> : <SignIn />}
+      {user ? <NavRoutes user={user} /> : <SignIn />}
     </>
   );
 };

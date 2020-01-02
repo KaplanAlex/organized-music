@@ -1,34 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { css } from "@emotion/core";
 import styled from "@emotion/styled";
 
-import Button from "../components/Button";
-import Container from "../components/Container";
 import PlaylistCard from "../components/PlaylistCard";
-// import Flex from "../components/Flex";
-import Navbar from "../components/Navbar";
+import SearchBox from "../components/SearchBox";
 
-const Home = ({ user }) => {
+const Home = () => {
+  const [searchInput, setSearchInput] = useState("");
+  const handleSearchChange = e => {
+    const { value } = e.target;
+    setSearchInput(value);
+  };
+  const handleSearchClear = () => {
+    setSearchInput("");
+  };
+
   return (
-    <>
-      <Navbar user={user} />
+    <div>
       <div
         css={css`
-          background-color: #f3f3f3;
-          padding: 25px 25px 25px 150px;
+          padding-bottom: 15px;
+          flex: 1;
         `}
       >
-        <Flex>
-          <PlaylistCard />
-          <PlaylistCard />
-          <PlaylistCard />
-          <PlaylistCard />
-          <PlaylistCard />
-          <PlaylistCard />
-          <PlaylistCard />
-        </Flex>
+        <SearchBox
+          value={searchInput}
+          onChange={handleSearchChange}
+          onClear={handleSearchClear}
+        />
       </div>
-    </>
+      <Flex>
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+      </Flex>
+    </div>
   );
 };
 
