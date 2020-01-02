@@ -1,7 +1,8 @@
 import React from "react";
-import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { css } from "@emotion/core";
 
+import navButtons from "./config/navButtons";
 import Navbar from "./components/Navbar";
 import Tagged from "./pages/Home";
 
@@ -17,7 +18,7 @@ const NavRoutes = ({ user }) => {
       `}
     >
       <Router>
-        <Navbar user={user} />
+        <Navbar user={user} navButtons={navButtons} />
         <div
           css={css`
             background-color: #f3f3f3;

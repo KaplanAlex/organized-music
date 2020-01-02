@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, navButtons }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const profileImg = user.profileImage.url;
 
@@ -31,26 +31,28 @@ const Navbar = ({ user }) => {
               `}
             />
           </a>
-          <span
+
+          <div
             css={css`
-              color: #ffffff;
+              display: flex;
+              flex-direction: column;
+              margin-top: 50px;
             `}
           >
-            Lets start tagging!
-          </span>
-
-          <ul>
-            <li>
-              <Link to="/">Search tagged</Link>
-            </li>
-            <li>
-              <Link to="/library"> All your playlists</Link>
-            </li>
-            <li>
-              <Link to="/search">Search Spotify</Link>
-            </li>
-          </ul>
-
+            {navButtons.map(btn => (
+              <NavLink
+                key={btn.path}
+                activeStyle={{
+                  color: "#ffffff"
+                }}
+                style={{ color: "#e3e3e3" }}
+                exact
+                to={btn.path}
+              >
+                {btn.label}
+              </NavLink>
+            ))}
+          </div>
           {settingsOpen ? (
             <SettingsContainer>
               <span>Settings</span>
