@@ -9,10 +9,14 @@ router.get("/", (req, res) => {
 });
 
 router.get("/playlists", (req, res) => {
-  const { user } = req;
+  const { user, query } = req;
+  const { offset } = query;
 
   spotifyReq(
-    { method: "get", url: "https://api.spotify.com/v1/me/playlists" },
+    {
+      method: "get",
+      url: `https://api.spotify.com/v1/me/playlists?offset=${offset}`
+    },
     user
   )
     .then(resp => {
