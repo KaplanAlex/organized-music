@@ -18,7 +18,8 @@ export default passport => {
 
   // Client request to login starts spotify OAuth flow.
   router.get("/login", (req, res) => {
-    var scope = "playlist-read-collaborative streaming";
+    // playlist-read-private required to see followed playlists.
+    var scope = "playlist-read-collaborative playlist-read-private streaming";
     res.redirect(
       "https://accounts.spotify.com/authorize?" +
         `client_id=${process.env.SPOTIFY_CLIENT_ID}` +
