@@ -2,56 +2,43 @@ import React, { useState, useEffect } from "react";
 import { css } from "@emotion/core";
 import styled from "@emotion/styled";
 
-import { getSpotifyLibraryPlaylists } from "../api/spotify";
+import { searchSpotifyPlaylists } from "../api/spotify";
 
 import PlaylistCard from "../components/PlaylistCard";
 import SearchBox from "../components/SearchBox";
 
-const Home = () => {
+const Search = () => {
   const [searchInput, setSearchInput] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [playlistData, setPlaylistData] = useState([]);
   const [displayData, setDisplayData] = useState([]);
   const [nextOffset, setNextOffset] = useState(0);
   const [total, setTotal] = useState(0);
 
   const loadMore = nextOffset < total;
 
-  useEffect(() => {
-    setLoading(true);
-    loadPlaylists();
-  }, []);
-
-  // Update displayed playlists based on seach string.
-  useEffect(() => {
-    const currData = playlistData.filter(
-      playlist =>
-        playlist.name.toLowerCase().indexOf(searchInput.toLowerCase()) != -1
-    );
-
-    setDisplayData(currData);
-  }, [playlistData, searchInput, setDisplayData]);
-
   const handleSearchChange = e => {
     const { value } = e.target;
     setSearchInput(value);
+    searchPlaylists(value);
   };
+
   const handleSearchClear = () => {
     setSearchInput("");
   };
 
-  // Load set of playlists based on current offset
-  const loadPlaylists = () => {
+  // Manage search here to potentially throttle requests in the future
+  const searchPlaylists = searchVal => {
     setLoading(true);
-    getSpotifyLibraryPlaylists(nextOffset)
+    searchSpotifyPlaylists(searchVal)
       .then(data => {
-        setPlaylistData(playlistData.concat(data.playlists));
+        console.log("Data in component", data);
+        setDisplayData(data.playlists);
         setNextOffset(data.nextOffset);
         setTotal(data.total);
       })
       .catch(err => {
-        console.log("Load playlist error in Library.jsx", err);
+        console.log("Load playlist error in Search.jsx", err);
       })
       .then(() => {
         setLoading(false);
@@ -60,7 +47,7 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Library</h1>
+      <h1>Search</h1>
       <div
         css={css`
           padding-bottom: 15px;
@@ -91,7 +78,9 @@ const Home = () => {
           <span>
             Showing {nextOffset} playlists of {total}
           </span>
-          <button onClick={loadPlaylists}>Load more playlists</button>
+          <button onClick={() => console.log("Load more!")}>
+            Load more playlists
+          </button>
         </div>
       )}
     </div>
@@ -106,4 +95,4 @@ const Flex = styled.div`
   align-items: center;
 `;
 
-export default Home;
+export default Search;

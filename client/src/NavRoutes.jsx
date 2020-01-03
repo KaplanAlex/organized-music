@@ -6,6 +6,7 @@ import navButtons from "./config/navButtons";
 import Library from "./pages/Library";
 import Navbar from "./components/Navbar";
 import Tagged from "./pages/Home";
+import Search from "./pages/Search";
 
 const NavRoutes = ({ user }) => {
   return (
@@ -35,7 +36,7 @@ const NavRoutes = ({ user }) => {
               <Library />
             </Route>
             <Route path="/search">
-              <h1>Search</h1>
+              <Search />
             </Route>
             <Route>
               <h1>404 Not found</h1>

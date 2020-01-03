@@ -5,7 +5,7 @@ import { PlayCircle } from "react-feather";
 
 import Card from "./Card";
 import Tag from "./Tag";
-import { playSpotifyPlaylist } from "../api/library";
+import { playSpotifyPlaylist } from "../api/spotify";
 
 const PlaylistCard = ({ id, name, description, img }) => {
   const [tags, setTags] = useState(["Rap", "Classic", "Vocal"]);

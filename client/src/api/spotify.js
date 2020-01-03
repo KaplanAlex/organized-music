@@ -40,3 +40,30 @@ export const playSpotifyPlaylist = playlistId => {
     withCredentials: true
   }).catch(err => console.log("Error occurred when starting playback", err));
 };
+
+/**
+ * Search spotify for a playlist matching the input name.
+ * @param {*} playlistName - Playlist name to match.
+ */
+export const searchSpotifyPlaylists = playlistName => {
+  const baseURL = "http://localhost:5000";
+  const route = "/user/search";
+  const params = `?name=${playlistName}&types=playlist`;
+  const query = baseURL + route + params;
+  return axios
+    .get(query, {
+      withCredentials: true
+    })
+    .then(playlistResp => {
+      const { items, offset, limit, total } = playlistResp.data.playlists;
+
+      // Only pass the relevant image.
+      const playlists = items.map(item => {
+        item.image = item.images ? item.images[0].url : null;
+        return item;
+      });
+
+      const nextOffset = offset + limit;
+      return { playlists, nextOffset, total };
+    });
+};
