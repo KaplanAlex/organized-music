@@ -7,14 +7,14 @@ import Card from "./Card";
 import Tag from "./Tag";
 import { playSpotifyPlaylist } from "../api/library";
 
-const PlaylistCard = ({ name, description, img }) => {
+const PlaylistCard = ({ id, name, description, img }) => {
   const [tags, setTags] = useState(["Rap", "Classic", "Vocal"]);
   const clearTag = idx => {
     setTags(tags.filter(t => tags.indexOf(t) !== idx));
   };
 
   const handlePlayClick = () => {
-    playSpotifyPlaylist();
+    playSpotifyPlaylist(id);
   };
 
   return (

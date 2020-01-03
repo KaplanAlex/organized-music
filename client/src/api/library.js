@@ -1,5 +1,10 @@
 import axios from "axios";
 
+/**
+ * Retreive a set of the user's saved playlists from spotify.
+ * Returns "limit" (20) playlists and the total number of saved playlists.
+ * @param {int} offset - Index to start playlist retreival from.
+ */
 export const getSpotifyLibraryPlaylists = offset => {
   return axios
     .get(`http://localhost:5000/user/playlists?offset=${offset}`, {
@@ -20,15 +25,18 @@ export const getSpotifyLibraryPlaylists = offset => {
     .catch(err => console.log("Error retreving playlists", err));
 };
 
+/**
+ * Starts playback of the playlist with id playlistId.
+ * @param {String} playlistId - Identifier for the selected
+ * playlist.
+ */
 export const playSpotifyPlaylist = playlistId => {
   const formData = new FormData();
   formData.append("type", "playlist");
   formData.append("withCredentials", true);
   return axios("http://localhost:5000/user/startPlayback", {
-    method: "post",
-    data: formData,
+    method: "POST",
+    data: `type=playlist&mediaId=${playlistId}`,
     withCredentials: true
-  })
-    .then(playResp => console.log("Playling should've started", playResp))
-    .catch(err => console.log("Error occurred when starting playback", err));
+  }).catch(err => console.log("Error occurred when starting playback", err));
 };
