@@ -9,16 +9,29 @@ import SearchBox from "../components/SearchBox";
 
 const Home = () => {
   const [searchInput, setSearchInput] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [playlistData, setPlaylistData] = useState([]);
+  const [displayData, setDisplayData] = useState([]);
   const [nextOffset, setNextOffset] = useState(0);
   const [total, setTotal] = useState(0);
+
   const loadMore = nextOffset < total;
 
   useEffect(() => {
     setLoading(true);
     loadPlaylists();
   }, []);
+
+  // Update displayed playlists based on seach string.
+  useEffect(() => {
+    const currData = playlistData.filter(
+      playlist =>
+        playlist.name.toLowerCase().indexOf(searchInput.toLowerCase()) != -1
+    );
+
+    setDisplayData(currData);
+  }, [playlistData, searchInput, setDisplayData]);
 
   const handleSearchChange = e => {
     const { value } = e.target;
@@ -61,7 +74,7 @@ const Home = () => {
       </div>
 
       <Flex>
-        {playlistData.map(playlist => (
+        {displayData.map(playlist => (
           <PlaylistCard
             key={playlist.id}
             name={playlist.name}
