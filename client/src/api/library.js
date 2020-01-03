@@ -16,5 +16,19 @@ export const getSpotifyLibraryPlaylists = offset => {
 
       const nextOffset = offset + limit;
       return { playlists, nextOffset, total };
-    });
+    })
+    .catch(err => console.log("Error retreving playlists", err));
+};
+
+export const playSpotifyPlaylist = playlistId => {
+  const formData = new FormData();
+  formData.append("type", "playlist");
+  formData.append("withCredentials", true);
+  return axios("http://localhost:5000/user/startPlayback", {
+    method: "post",
+    data: formData,
+    withCredentials: true
+  })
+    .then(playResp => console.log("Playling should've started", playResp))
+    .catch(err => console.log("Error occurred when starting playback", err));
 };
