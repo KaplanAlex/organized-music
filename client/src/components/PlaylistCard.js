@@ -57,7 +57,7 @@ const TagDiv = styled.div`
   height: 55px;
 `;
 
-const PlaylistCard = () => {
+const PlaylistCard = ({ name, description, img }) => {
   const [tags, setTags] = useState(["Rap", "Classic", "Vocal"]);
   const clearTag = idx => {
     setTags(tags.filter(t => tags.indexOf(t) !== idx));
@@ -66,15 +66,15 @@ const PlaylistCard = () => {
     <StyledCard>
       <StyledFlex>
         <StyledImage>
-          <StyledImageNoDrag src={"../../static/Section.80.jpeg"} />
+          <StyledImageNoDrag src={img} />
         </StyledImage>
-        <StyledText>Liked from radio</StyledText>
+        <StyledText>{name}</StyledText>
         <StyledText
           css={css`
             font-size: 12px;
           `}
         >
-          This is the information about the playlist that is displayed
+          {description}
         </StyledText>
         <TagDiv>
           {tags.map((tag, index) => (

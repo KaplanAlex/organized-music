@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { css } from "@emotion/core";
 
 import navButtons from "./config/navButtons";
+import Library from "./pages/Library";
 import Navbar from "./components/Navbar";
 import Tagged from "./pages/Home";
 
@@ -10,11 +11,7 @@ const NavRoutes = ({ user }) => {
   return (
     <div
       css={css`
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        height: 100%;
       `}
     >
       <Router>
@@ -35,7 +32,7 @@ const NavRoutes = ({ user }) => {
               <Tagged />
             </Route>
             <Route path="/library">
-              <h1>Library</h1>
+              <Library />
             </Route>
             <Route path="/search">
               <h1>Search</h1>
