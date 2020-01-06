@@ -98,7 +98,7 @@ export default passport => {
           algorithm: "RS256"
         });
         // httpOnly - will not be displayed with document.getCookie on client side
-        res.cookie("jwt", user_jwt, { maxAge: 900000, httpOnly: true });
+        res.cookie("jwt", user_jwt, { maxAge: 90000000, httpOnly: true });
         return res.redirect(`${process.env.CLIENT_URL}/`);
       })
       .catch(err => {
