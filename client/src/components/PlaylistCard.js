@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { PlayCircle } from "react-feather";
+import { PlayCircle, PlusCircle } from "react-feather";
 
 import Card from "./Card";
 import Tag from "./Tag";
@@ -34,9 +34,13 @@ const PlaylistCard = ({ id, name, description, img }) => {
           <StyledDescription>{filteredDescription}</StyledDescription>
         </StyledText>
         <TagDiv>
+          {!!tags && "Add a tag to start organizing!"}
           {tags.map((tag, index) => (
             <Tag key={index} value={tag} onClear={() => clearTag(index)} />
           ))}
+          <PlusButton>
+            <StyledPlusCircle />
+          </PlusButton>
         </TagDiv>
       </StyledFlex>
     </StyledCard>
@@ -60,14 +64,34 @@ const StyledPlayCircle = styled(PlayCircle)`
   }
 `;
 
-const PlayButton = styled.button`
+const StyledPlusCircle = styled(PlusCircle)`
+  &:hover {
+    /* color: #333333; */
+    color: #5c5c5c;
+  }
+`;
+
+const InvisibleButton = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+`;
 
+const PlayButton = styled(InvisibleButton)`
   &:active {
     ${StyledPlayCircle} {
       color: #a3a3a3;
+    }
+  }
+`;
+
+const PlusButton = styled(InvisibleButton)`
+  &:active {
+    ${StyledPlusCircle} {
+      color: #7d7d7d;
     }
   }
 `;
@@ -182,6 +206,7 @@ const TagDiv = styled.div`
   max-width: 200px;
   height: 55px;
   overflow: hidden;
+  font-size: 12px;
 `;
 
 export default PlaylistCard;
