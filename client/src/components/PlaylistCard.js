@@ -9,6 +9,9 @@ import { playSpotifyPlaylist } from "../api/spotify";
 
 const PlaylistCard = ({ id, name, description, img }) => {
   const [tags, setTags] = useState(["Rap", "Classic", "Vocal"]);
+  const filteredName = name || "No Name";
+  const filteredDescription = description || "No description";
+
   const clearTag = idx => {
     setTags(tags.filter(t => tags.indexOf(t) !== idx));
   };
@@ -16,7 +19,6 @@ const PlaylistCard = ({ id, name, description, img }) => {
   const handlePlayClick = () => {
     playSpotifyPlaylist(id);
   };
-
   return (
     <StyledCard>
       <StyledFlex>
@@ -28,13 +30,9 @@ const PlaylistCard = ({ id, name, description, img }) => {
             </PlayButton>
           </ImageOverlay>
         </ImageContainer>
-        <StyledText>{name}</StyledText>
-        <StyledText
-          css={css`
-            font-size: 12px;
-          `}
-        >
-          {description}
+        <StyledText>
+          <StyledTitle>{filteredName}</StyledTitle>
+          <StyledDescription>{filteredDescription}</StyledDescription>
         </StyledText>
         <TagDiv>
           {tags.map((tag, index) => (
@@ -89,21 +87,34 @@ const ImageOverlay = styled.div`
 `;
 
 const ImageContainer = styled.div`
+  display: flex;
   position: relative;
-  max-height: 200px;
-  max-width: 200px;
+  height: 200px;
+  width: 200px;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
 
   &:hover {
     ${ImageOverlay} {
       opacity: 1;
     }
   }
+
+  /* Disk Background image */
+  background-image: url("../../static/empty_disk.png");
+  /* display: inline-block; */ /* Removes the border */
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const StyledImage = styled.img`
-  max-height: 200px;
-  max-width: 200px;
-
+  flex: 1;
+  height: 100%;
+  width: auto;
+  object-fit: cover;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-drag: none;
@@ -129,12 +140,39 @@ const StyledFlex = styled.div`
 `;
 
 const StyledText = styled.div`
+  min-height: 74px;
   max-height: 200px;
   max-width: 200px;
 
   display: flex;
+  flex-direction: column;
   padding-top: 10px;
   justify-content: flex-start;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+const StyledTitle = styled.div`
+  display: -webkit-box;
+  white-space: nowrap;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+`;
+
+const StyledDescription = styled.div`
+  font-size: 12px;
+  line-height: 18px;
+
+  white-space: nowrap;
+  color: #b3b3b3;
+  padding: 0;
+  margin-top: 4px;
+  white-space: normal;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const TagDiv = styled.div`
