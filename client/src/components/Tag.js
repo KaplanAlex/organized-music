@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { css } from "@emotion/core";
 
 const StyledDiv = styled.div`
   display: flex;
@@ -13,17 +12,14 @@ const StyledDiv = styled.div`
   height: 20px;
   border-radius: 10px;
   border: 1px solid #e6e6e6;
-  /* background-color: #42aaf5; */
-  /* color: #ffffff; */
 `;
 
 const StyledButton = styled.button`
   margin-left: 10px;
-
   outline: none;
   pointer-events: auto;
   background-color: transparent;
-  /* color: #ffffff; */
+
   padding-bottom: 10px;
   border: 0;
   padding: 0;
@@ -33,9 +29,11 @@ const StyledButton = styled.button`
 `;
 
 const Tag = ({ value, onClear }) => {
+  const truncated =
+    value.length < 7 ? value : value.substring(0, 7).concat("...");
   return (
     <StyledDiv>
-      {value} <StyledButton onClick={onClear}>x</StyledButton>
+      {truncated} <StyledButton onClick={onClear}>x</StyledButton>
     </StyledDiv>
   );
 };

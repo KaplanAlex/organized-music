@@ -35,7 +35,9 @@ router.post("/startPlayback", (req, res) => {
       data: { context_uri: `spotify:${type}:${mediaId}` }
     },
     user
-  ).catch(err => console.log("Error starting playback", err));
+  ).catch(err => {
+    console.log("Error starting playback", err.err.response);
+  });
 
   return res.send("Received");
 });

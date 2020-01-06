@@ -35,8 +35,6 @@ const Home = () => {
         <PlaylistCard />
         <PlaylistCard />
         <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
       </Flex>
     </div>
   );

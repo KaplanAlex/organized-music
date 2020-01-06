@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { css } from "@emotion/core";
 import { PlayCircle } from "react-feather";
 
 import Card from "./Card";
@@ -8,7 +7,7 @@ import Tag from "./Tag";
 import { playSpotifyPlaylist } from "../api/spotify";
 
 const PlaylistCard = ({ id, name, description, img }) => {
-  const [tags, setTags] = useState(["Rap", "Classic", "Vocal"]);
+  const [tags, setTags] = useState([]);
   const filteredName = name || "No Name";
   const filteredDescription = description || "No description";
 
@@ -182,6 +181,7 @@ const TagDiv = styled.div`
   padding-top: 10px;
   max-width: 200px;
   height: 55px;
+  overflow: hidden;
 `;
 
 export default PlaylistCard;
