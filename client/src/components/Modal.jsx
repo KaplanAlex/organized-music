@@ -16,10 +16,12 @@ const JSX_Modal = ({ open, setClose, children }) => {
   return (
     <ModalWrapper open={open}>
       <ModalStyles>
-        <h3>Header</h3>
-        <button onClick={setClose}>Close</button>
-        <div>{children}</div>
-        <div>Footer</div>
+        <ModalOverflow>
+          <h3>Header</h3>
+          <button onClick={setClose}>Close</button>
+          <div>{children}</div>
+          <div>Footer</div>
+        </ModalOverflow>
       </ModalStyles>
     </ModalWrapper>
   );
@@ -61,7 +63,6 @@ const ModalWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100%;
-  overflow-y: hidden;
   z-index: 2;
 
   position: fixed;
@@ -75,13 +76,14 @@ const ModalStyles = styled.div`
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
-  /* align-items: stretch; */
+  align-items: stretch;
   width: 50%;
   height: 50%;
   /* flex: 1; */
-  @media (max-width: 850px) {
-    flex-direction: column;
-  }
+`;
+
+const ModalOverflow = styled.div`
+  overflow-y: auto;
 `;
 
 export default Modal;
