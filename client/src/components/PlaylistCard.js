@@ -5,9 +5,11 @@ import { PlayCircle, PlusCircle } from "react-feather";
 import Card from "./Card";
 import Tag from "./Tag";
 import { playSpotifyPlaylist } from "../api/spotify";
+import Modal from "./Modal";
 
 const PlaylistCard = ({ id, name, description, img }) => {
   const [tags, setTags] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
   const filteredName = name || "No Name";
   const filteredDescription = description || "No description";
 
@@ -18,6 +20,15 @@ const PlaylistCard = ({ id, name, description, img }) => {
   const handlePlayClick = () => {
     playSpotifyPlaylist(id);
   };
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <StyledCard>
       <StyledFlex>
@@ -38,11 +49,16 @@ const PlaylistCard = ({ id, name, description, img }) => {
           {tags.map((tag, index) => (
             <Tag key={index} value={tag} onClear={() => clearTag(index)} />
           ))}
-          <PlusButton>
+          <PlusButton onClick={openModal}>
             <StyledPlusCircle />
           </PlusButton>
         </TagDiv>
       </StyledFlex>
+      {modalOpen && (
+        <Modal open={modalOpen} setClose={closeModal}>
+          <div>Some content</div>
+        </Modal>
+      )}
     </StyledCard>
   );
 };

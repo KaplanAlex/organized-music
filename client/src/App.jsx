@@ -5,6 +5,7 @@ import SignIn from "./pages/SignIn";
 
 import GlobalStyles from "./styles.js/Global";
 import NavRoutes from "./NavRoutes";
+import { StyleProvider } from "./context/StyleContext";
 
 const App = () => {
   // Validate login with request for user.
@@ -25,12 +26,21 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Remove scrollbar from nested components.
+  const [scroll, setScroll] = useState(true);
+
   return loading ? (
     ""
   ) : (
     <>
-      <GlobalStyles />
-      {user ? <NavRoutes user={user} /> : <SignIn />}
+      <GlobalStyles scroll={scroll} />
+      {user ? (
+        <StyleProvider value={{ toggleScroll: setScroll }}>
+          <NavRoutes user={user} />
+        </StyleProvider>
+      ) : (
+        <SignIn />
+      )}
     </>
   );
 };
