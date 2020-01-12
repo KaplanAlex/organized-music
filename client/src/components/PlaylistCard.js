@@ -64,7 +64,7 @@ const PlaylistCard = ({ id, name, description, img }) => {
 };
 
 const StyledPlayCircle = styled(PlayCircle)`
-  color: white;
+  color: #cccccc;
   font-size: 100px;
   position: absolute;
   top: 50%;
@@ -76,7 +76,9 @@ const StyledPlayCircle = styled(PlayCircle)`
   text-align: center;
 
   &:hover {
-    color: #cccccc;
+    color: #ffffff;
+    height: 45%;
+    width: 45%;
   }
 `;
 
