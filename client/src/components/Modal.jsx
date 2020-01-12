@@ -1,27 +1,31 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useRef } from "react";
 import ReactDOM from "react-dom";
 import styled from "@emotion/styled";
 import StyleContext from "../context/StyleContext";
 
-const JSX_Modal = ({ open, setClose, children }) => {
+const JSX_Modal = ({ open, closeModal, children }) => {
   const { toggleScroll } = useContext(StyleContext);
+  const contentRef = useRef(null);
+
+  const handleClickOutside = event => {
+    if (contentRef.current && !contentRef.current.contains(event.target)) {
+      closeModal();
+    }
+  };
+
   useEffect(() => {
     toggleScroll(false);
-
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       toggleScroll(true);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   return (
     <ModalWrapper open={open}>
-      <ModalStyles>
-        <ModalOverflow>
-          <h3>Header</h3>
-          <button onClick={setClose}>Close</button>
-          <div>{children}</div>
-          <div>Footer</div>
-        </ModalOverflow>
+      <ModalStyles ref={contentRef}>
+        <ModalOverflow>{children}</ModalOverflow>
       </ModalStyles>
     </ModalWrapper>
   );
@@ -33,27 +37,6 @@ const Modal = props => {
     document.querySelector("#modal")
   );
 };
-
-// const ModalWrapper = styled.div`
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   bottom: 0;
-//   right: 0;
-//   background: rgba(0, 0, 0, 0.6);
-//   display: ${props => (props.open ? "block" : "none")};
-// `;
-
-// const ModalStyles = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   flex: 1;
-//   align-items: stretch;
-//   justify-content: center;
-//   /* height: 50%;
-//   width: 50%; */
-//   background-color: #ffffff;
-// `;
 
 const ModalWrapper = styled.div`
   height: 100%;
@@ -79,11 +62,13 @@ const ModalStyles = styled.div`
   align-items: stretch;
   width: 50%;
   height: 50%;
+  border-radius: 5px;
   /* flex: 1; */
 `;
 
 const ModalOverflow = styled.div`
   overflow-y: auto;
+  padding: 10px;
 `;
 
 export default Modal;

@@ -29,17 +29,21 @@ const PlaylistCard = ({ id, name, description, img }) => {
     setModalOpen(false);
   };
 
+  const PlayableImage = (
+    <ImageContainer>
+      <StyledImage src={img} />
+      <ImageOverlay>
+        <PlayButton onClick={handlePlayClick}>
+          <StyledPlayCircle />
+        </PlayButton>
+      </ImageOverlay>
+    </ImageContainer>
+  );
+
   return (
     <StyledCard>
       <StyledFlex>
-        <ImageContainer>
-          <StyledImage src={img} />
-          <ImageOverlay>
-            <PlayButton onClick={handlePlayClick}>
-              <StyledPlayCircle />
-            </PlayButton>
-          </ImageOverlay>
-        </ImageContainer>
+        {PlayableImage}
         <StyledText>
           <StyledTitle>{filteredName}</StyledTitle>
           <StyledDescription>{filteredDescription}</StyledDescription>
@@ -55,7 +59,10 @@ const PlaylistCard = ({ id, name, description, img }) => {
         </TagDiv>
       </StyledFlex>
       {modalOpen && (
-        <Modal open={modalOpen} setClose={closeModal}>
+        <Modal open={modalOpen} closeModal={closeModal}>
+          {PlayableImage}
+          <div>Some content</div>
+          <div>Some content</div>
           <div>Some content</div>
         </Modal>
       )}
