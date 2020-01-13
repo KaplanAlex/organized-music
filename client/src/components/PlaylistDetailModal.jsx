@@ -59,17 +59,17 @@ const PlaylistDetailModal = ({ open, closeModal, playableImage, tags }) => {
           onChange={handleSearchChange}
           onClear={handleSearchClear}
           placeholder={"Add a tag"}
-          roundTopOnly={true}
+          roundTopOnly={showTagList && tagOptions.length}
           onfocus={() => setShowTagList(true)}
         />
-        <Divider />
+
         <div>
           {showTagList &&
             tagOptions.map(tag => {
               return (
                 <div key={tag._id} onClick={() => console.log(tag.value)}>
-                  <SearchListItem>{tag.value}</SearchListItem>
                   <Divider />
+                  <SearchListItem>{tag.value}</SearchListItem>
                 </div>
               );
             })}
