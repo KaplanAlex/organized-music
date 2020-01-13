@@ -9,8 +9,12 @@ const PlaylistDetailModal = ({ open, closeModal, playableImage, tags }) => {
   const [searchInput, setSearchInput] = useState("");
   const [showTagList, setShowTagList] = useState(false);
 
+  // Retreive user object to extract tags
   const { user } = useContext(UserContext);
   const { tags: userTags } = user;
+
+  // Only show unused tags
+  const availableTags = userTags.filter(tag => tags.indexOf(tag.value) == -1);
 
   const handleSearchChange = e => {
     const { value } = e.target;
@@ -53,7 +57,7 @@ const PlaylistDetailModal = ({ open, closeModal, playableImage, tags }) => {
         <Divider />
         <div>
           {showTagList &&
-            userTags.map(tag => {
+            availableTags.map(tag => {
               return (
                 <div key={tag._id}>
                   <SearchListItem>{tag.value}</SearchListItem>

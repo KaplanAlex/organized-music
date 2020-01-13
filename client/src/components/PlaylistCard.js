@@ -8,7 +8,7 @@ import PlaylistDetailModal from "./PlaylistDetailModal";
 import { playSpotifyPlaylist } from "../api/spotify";
 
 const PlaylistCard = ({ id, name, description, img }) => {
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(["rap"]);
   const [modalOpen, setModalOpen] = useState(false);
   const filteredName = name || "No Name";
   const filteredDescription = description || "No description";
