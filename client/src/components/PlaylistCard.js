@@ -49,7 +49,7 @@ const PlaylistCard = ({ id, name, description, img }) => {
           <StyledDescription>{filteredDescription}</StyledDescription>
         </StyledText>
         <TagDiv>
-          {!!tags && "Add a tag to start organizing!"}
+          {!tags.length && "Add a tag to start organizing!"}
           {tags.map((tag, index) => (
             <Tag key={index} value={tag} onClear={() => clearTag(index)} />
           ))}
