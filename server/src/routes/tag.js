@@ -35,7 +35,7 @@ router.post("/", (req, res) => {
 
   // Create the new tag
   const newTag = new Tag({
-    value: tag.value,
+    value: tag,
     creator_id: user._id
   });
   newTag.save();

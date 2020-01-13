@@ -4,8 +4,8 @@ import { PlayCircle, PlusCircle } from "react-feather";
 
 import Card from "./Card";
 import Tag from "./Tag";
+import PlaylistDetailModal from "./PlaylistDetailModal";
 import { playSpotifyPlaylist } from "../api/spotify";
-import Modal from "./Modal";
 
 const PlaylistCard = ({ id, name, description, img }) => {
   const [tags, setTags] = useState([]);
@@ -59,12 +59,12 @@ const PlaylistCard = ({ id, name, description, img }) => {
         </TagDiv>
       </StyledFlex>
       {modalOpen && (
-        <Modal open={modalOpen} closeModal={closeModal}>
-          {PlayableImage}
-          <div>Some content</div>
-          <div>Some content</div>
-          <div>Some content</div>
-        </Modal>
+        <PlaylistDetailModal
+          open={modalOpen}
+          closeModal={closeModal}
+          playableImage={PlayableImage}
+          tags={tags}
+        />
       )}
     </StyledCard>
   );

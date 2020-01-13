@@ -4,9 +4,11 @@ import styled from "@emotion/styled";
 import StyleContext from "../context/StyleContext";
 
 const JSX_Modal = ({ open, closeModal, children }) => {
+  // Access global scroll setting.
   const { toggleScroll } = useContext(StyleContext);
-  const contentRef = useRef(null);
 
+  // Detect clicks outside of the modal
+  const contentRef = useRef(null);
   const handleClickOutside = event => {
     if (contentRef.current && !contentRef.current.contains(event.target)) {
       closeModal();
@@ -31,6 +33,7 @@ const JSX_Modal = ({ open, closeModal, children }) => {
   );
 };
 
+// Create a portal to the div next to the current react app.
 const Modal = props => {
   return ReactDOM.createPortal(
     <JSX_Modal {...props} />,
@@ -56,14 +59,13 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalStyles = styled.div`
-  background-color: #ffffff;
+  background-color: #f3f3f3;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   width: 50%;
   height: 50%;
   border-radius: 5px;
-  /* flex: 1; */
 `;
 
 const ModalOverflow = styled.div`

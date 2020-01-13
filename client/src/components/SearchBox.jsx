@@ -2,6 +2,40 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Search, X } from "react-feather";
 
+const SearchBox = ({
+  value,
+  onChange,
+  onClear,
+  onfocus,
+  placeholder,
+  roundTopOnly
+}) => {
+  return (
+    <SearchBoxContainer>
+      <StyledLabel>
+        <StyledInput
+          type="text"
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          roundTopOnly={roundTopOnly}
+          onFocus={onfocus}
+        />
+      </StyledLabel>
+      <StyledDiv>
+        <StyledIconSpan>
+          <Search color="#121212" />
+        </StyledIconSpan>
+        {value ? (
+          <StyledClear onClick={onClear}>
+            <X />
+          </StyledClear>
+        ) : null}
+      </StyledDiv>
+    </SearchBoxContainer>
+  );
+};
+
 const SearchBoxContainer = styled.div`
   display: inline-flex;
   position: relative;
@@ -14,7 +48,8 @@ const StyledInput = styled.input`
   font-size: 14px;
   width: 100%;
   border: 0;
-  border-radius: 500px;
+  border-radius: ${props =>
+    props.roundTopOnly ? "10px 10px 0px 0px" : "10px"};
   box-sizing: border-box;
   &:focus {
     outline: none;
@@ -54,29 +89,9 @@ const StyledClear = styled.button`
   padding: 0;
 `;
 
-const SearchBox = ({ value, onChange, onClear }) => {
-  return (
-    <SearchBoxContainer>
-      <StyledLabel>
-        <StyledInput
-          type="text"
-          value={value}
-          placeholder="Search..."
-          onChange={onChange}
-        />
-      </StyledLabel>
-      <StyledDiv>
-        <StyledIconSpan>
-          <Search color="#121212" />
-        </StyledIconSpan>
-        {value ? (
-          <StyledClear onClick={onClear}>
-            <X />
-          </StyledClear>
-        ) : null}
-      </StyledDiv>
-    </SearchBoxContainer>
-  );
+SearchBox.defaultProps = {
+  placeholder: "Search...",
+  roundTopOnly: false
 };
 
 export default SearchBox;
