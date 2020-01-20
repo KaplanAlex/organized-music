@@ -10,18 +10,7 @@ export const getSpotifyLibraryPlaylists = offset => {
     .get(`http://localhost:5000/user/playlists?offset=${offset}`, {
       withCredentials: true
     })
-    .then(playlistResp => {
-      const { items, offset, limit, total } = playlistResp.data;
-
-      // Only pass the relevant image.
-      const playlists = items.map(item => {
-        item.image = item.images ? item.images[0].url : null;
-        return item;
-      });
-
-      const nextOffset = offset + limit;
-      return { playlists, nextOffset, total };
-    })
+    .then(playlistResp => playlistResp.data)
     .catch(err => console.log("Error retreving playlists", err));
 };
 
@@ -54,16 +43,5 @@ export const searchSpotifyPlaylists = playlistName => {
     .get(query, {
       withCredentials: true
     })
-    .then(playlistResp => {
-      const { items, offset, limit, total } = playlistResp.data.playlists;
-
-      // Only pass the relevant image.
-      const playlists = items.map(item => {
-        item.image = item.images ? item.images[0].url : null;
-        return item;
-      });
-
-      const nextOffset = offset + limit;
-      return { playlists, nextOffset, total };
-    });
+    .then(playlistResp => playlistResp.data);
 };

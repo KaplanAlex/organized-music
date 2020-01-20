@@ -8,7 +8,11 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  creator_id: {
+  spotifyId: {
+    type: String,
+    required: true
+  },
+  creatorId: {
     type: String,
     required: true
   },

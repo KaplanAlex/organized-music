@@ -20,7 +20,9 @@ const Search = () => {
   const handleSearchChange = e => {
     const { value } = e.target;
     setSearchInput(value);
-    searchPlaylists(value);
+    if (value.length) {
+      searchPlaylists(value);
+    }
   };
 
   const handleSearchClear = () => {
