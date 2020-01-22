@@ -1,10 +1,11 @@
 import Playlist from "../models/Playlist";
+import User from "../models/User";
 
 /**
  * Transform received playlist objects from spotify to internal format.
  * Remove extraneous information and map to interal representation of
  * the playlist containing tags (if it exists).
- * @param {*} spotifyData - Playlist data - response from Spoity API
+ * @param {Object} spotifyData - Playlist data - response from Spoity API
  */
 export const transformSpotifyPlaylists = async spotifyPlaylists => {
   const playlists = await Promise.all(
@@ -31,4 +32,37 @@ export const transformSpotifyPlaylists = async spotifyPlaylists => {
   );
 
   return playlists;
+};
+
+/**
+ * Save a tag to playlist with matching spotifyId. Save the playlist
+ * if it is not yet associated with the user.
+ * @param {User} user      - User following mongo user model.
+ * @param {Tag} tag       - Tag to associate with the playlist.
+ * @param {String} spotifyId - Id corresponding to a playlist on spotify.
+ *
+ */
+export const tagPlaylist = async (user, tag, playlistInfo) => {
+  const { spotifyId, name } = playlistInfo;
+
+  return Playlist.findOne({ spotifyId }).then(playlist => {
+    if (playlist) {
+      playlist.tags.append(tag);
+      playlist.save();
+      return { user, playlist };
+    } else {
+      // Save the playlist
+      const newPlaylist = new Playlist({
+        name,
+        spotifyId,
+        creatorId: user._id,
+        tags: [tag]
+      });
+      newPlaylist.save();
+      user.playlists.append(newPlaylist);
+      user.save();
+
+      return { user, newPlaylist };
+    }
+  });
 };

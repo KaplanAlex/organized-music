@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import Tag from "../models/Tag";
+import { createTag } from "../services/tag";
 
 const router = Router();
 
@@ -15,7 +15,10 @@ router.get("/", (req, res) => {
 
 /**
  * POST "/tag/"
- * Body: {tag: {value: "name"}}
+ * Body: {
+ *  tag: {value: "name"},
+ * }
+ *
  * Create a new tag object in the database and link it
  * to the user.
  */
@@ -23,28 +26,14 @@ router.post("/", (req, res) => {
   const { user } = req;
   const { tag } = req.body;
 
-  const { tags } = user;
-
   // Handle duplicate user-tag names
-  const duplicates = tags.filter(userTag => userTag.value == tag.value);
-  if (duplicates.length) {
-    return res
-      .status(400)
-      .send({ err: "Cannot have two tags with the same name." });
+  newTag = createTag(tag, user);
+  if (newTag.err) {
+    return res.status(400).send({ err: newTag.err });
   }
 
-  // Create the new tag
-  const newTag = new Tag({
-    value: tag,
-    creator_id: user._id
-  });
-  newTag.save();
-
-  tags.push(newTag);
-  user.tags = tags;
-  user.save();
-
-  return res.send({ tags });
+  // Return newTag object and updated user to the client
+  res.status(200).send(newTag);
 });
 
 export default router;
