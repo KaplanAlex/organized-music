@@ -7,6 +7,7 @@ const SearchBox = ({
   onChange,
   onClear,
   onfocus,
+  onKeyDown,
   placeholder,
   roundTopOnly
 }) => {
@@ -20,6 +21,7 @@ const SearchBox = ({
           onChange={onChange}
           roundTopOnly={roundTopOnly}
           onFocus={onfocus}
+          onKeyDown={onKeyDown}
         />
       </StyledLabel>
       <StyledDiv>
