@@ -43,14 +43,17 @@ export const transformSpotifyPlaylists = async spotifyPlaylists => {
  *
  */
 export const tagPlaylist = async (user, tag, playlistInfo) => {
+  // const { tags, playlists } = user;
   const { spotifyId, name } = playlistInfo;
-
-  return Playlist.findOne({ spotifyId }).then(playlist => {
+  console.log("Starting tagging, will return promise");
+  return Playlist.findOne({ spotifyId, creatorId: user._id }).then(playlist => {
     if (playlist) {
-      playlist.tags.append(tag);
+      console.log("Old playlist");
+      playlist.tags.push(tag);
       playlist.save();
       return { user, playlist };
     } else {
+      console.log("New Playlist");
       // Save the playlist
       const newPlaylist = new Playlist({
         name,
@@ -58,8 +61,10 @@ export const tagPlaylist = async (user, tag, playlistInfo) => {
         creatorId: user._id,
         tags: [tag]
       });
+      console.log("Saving newplaylist");
       newPlaylist.save();
-      user.playlists.append(newPlaylist);
+      user.playlists.push(newPlaylist);
+      console.log("Saving User from playlist");
       user.save();
 
       return { user, newPlaylist };

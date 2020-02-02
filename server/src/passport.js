@@ -19,7 +19,10 @@ const cookieExtractor = function(req) {
   return token;
 };
 
-const publicKey = fs.readFileSync("./secrets/jwt_public.key", "utf8");
+const publicKey = fs.readFileSync(
+  `${process.env.SECRET_PATH}/jwt_public.key`,
+  "utf8"
+);
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
   secretOrKey: publicKey,

@@ -19,6 +19,7 @@ export const createTag = (user, tag) => {
 
   tags.push(newTag);
   user.tags = tags;
+  console.log("saving tag user");
   user.save();
 
   return { newTag, user };

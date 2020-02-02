@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 });
 
 /**
- * PATCH "/playlists/tags"
+ * POST (Shold be PATCH but this is currently blocked by cors) "/playlists/tags"
  * Add a tag to a playlists set of tags.
  * Create the tag if it is new
  * Create the playlist if it's new
@@ -30,21 +30,27 @@ router.get("/", (req, res) => {
  *  }
  * }
  */
-router.patch("/tags", (req, res) => {
+router.post("/tags", (req, res) => {
   var { user } = req;
   var { tag, playlistInfo } = req.body;
+  tag = JSON.parse(tag);
+  playlistInfo = JSON.parse(playlistInfo);
+
+  console.log(tag);
+  console.log(playlistInfo);
 
   // If only the value is passed, the tag is new.
-
   if (!tag._id) {
-    newTag = createTag(user, tag);
-    if (newTag.err) {
-      return res.status(400).send({ err: new_tag.err });
+    console.log("Creating tag");
+    const createResp = createTag(user, tag);
+    if (createResp.err) {
+      return res.status(400).send(createResp.err);
     }
 
     // The created tag was saved to the user. Update the reference.
-    user = newTag.user;
-    tag = newTag.newTag;
+    user = createResp.user;
+    tag = createResp.newTag;
+    console.log("after tag creation", user, tag);
   }
 
   // Add the tag to the playlist. Save the playlist if it's new

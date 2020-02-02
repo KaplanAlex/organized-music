@@ -93,7 +93,10 @@ export default passport => {
           });
       })
       .then(user => {
-        const privateKey = fs.readFileSync("./secrets/jwt_private.key", "utf8");
+        const privateKey = fs.readFileSync(
+          `${process.env.SECRET_PATH}/jwt_private.key`,
+          "utf8"
+        );
         const user_jwt = jwt.sign({ sub: user._id }, privateKey, {
           algorithm: "RS256"
         });
