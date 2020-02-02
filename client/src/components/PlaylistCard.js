@@ -64,6 +64,8 @@ const PlaylistCard = ({ id, name, description, img }) => {
           closeModal={closeModal}
           playableImage={PlayableImage}
           tags={tags}
+          id={id}
+          name={filteredName}
         />
       )}
     </StyledCard>

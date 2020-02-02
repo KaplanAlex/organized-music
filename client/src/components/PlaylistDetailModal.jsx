@@ -4,8 +4,16 @@ import styled from "@emotion/styled";
 import UserContext from "../context/UserContext";
 import Modal from "./Modal";
 import SearchBox from "./SearchBox";
+import { tagPlaylist } from "../api/playlist";
 
-const PlaylistDetailModal = ({ open, closeModal, playableImage, tags }) => {
+const PlaylistDetailModal = ({
+  open,
+  closeModal,
+  playableImage,
+  tags,
+  name,
+  id
+}) => {
   const [searchInput, setSearchInput] = useState("");
   const [showTagList, setShowTagList] = useState(false);
   const [tagOptions, setTagOptions] = useState([]);
@@ -33,9 +41,12 @@ const PlaylistDetailModal = ({ open, closeModal, playableImage, tags }) => {
   };
 
   const handleEnter = e => {
+    const { value } = e.target;
+
     // Catch enter key press
     if (e.keyCode == 13) {
       console.log("Submited", e.target.value);
+      tagPlaylist({ value: "98th Tag" }, { name: name, spotifyId: id });
     }
   };
 
