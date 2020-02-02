@@ -7,7 +7,7 @@ import axios from "axios";
  */
 export const getSpotifyLibraryPlaylists = offset => {
   return axios
-    .get(`http://localhost:5000/user/playlists?offset=${offset}`, {
+    .get(`${process.env.API_URL}/user/playlists?offset=${offset}`, {
       withCredentials: true
     })
     .then(playlistResp => playlistResp.data)
@@ -23,7 +23,7 @@ export const playSpotifyPlaylist = playlistId => {
   const formData = new FormData();
   formData.append("type", "playlist");
   formData.append("withCredentials", true);
-  return axios("http://localhost:5000/user/startPlayback", {
+  return axios(`${process.env.API_URL}/user/startPlayback`, {
     method: "POST",
     data: `type=playlist&mediaId=${playlistId}`,
     withCredentials: true
@@ -35,7 +35,7 @@ export const playSpotifyPlaylist = playlistId => {
  * @param {*} playlistName - Playlist name to match.
  */
 export const searchSpotifyPlaylists = playlistName => {
-  const baseURL = "http://localhost:5000";
+  const baseURL = process.env.API_URL;
   const route = "/user/search";
   const params = `?name=${playlistName}&types=playlist`;
   const query = baseURL + route + params;

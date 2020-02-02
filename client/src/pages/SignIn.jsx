@@ -29,7 +29,7 @@ const SignIn = () => {
               hoverColor={"#18AC4D"}
               hoverBorder={true}
               onClick={() =>
-                window.location.replace("http://localhost:5000/auth/login")
+                window.location.replace(`${process.env.API_URL}/auth/login`)
               }
             >
               Login with Spotify

@@ -12,7 +12,7 @@ const App = () => {
   // Validate login with request for user.
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user", { withCredentials: true })
+      .get(`${process.env.API_URL}/user`, { withCredentials: true })
       .then(user => {
         setUser(user.data.user);
       })

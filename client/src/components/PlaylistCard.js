@@ -151,7 +151,7 @@ const ImageContainer = styled.div`
   }
 
   /* Disk Background image */
-  background-image: url("../../static/empty_disk.png");
+  background-image: url("${process.env.STATIC_URL}/empty_disk.png");
   /* display: inline-block; */ /* Removes the border */
   background-position: center center;
   background-size: cover;

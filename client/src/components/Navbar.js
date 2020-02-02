@@ -25,7 +25,7 @@ const Navbar = ({ user, navButtons }) => {
         <FlexContainer>
           <a href="https://open.spotify.com/">
             <StyledImg
-              src="../../static/Spotify_Icon_RGB_Green.png"
+              src={`${process.env.STATIC_URL}/Spotify_Icon_RGB_Green.png`}
               css={css`
                 margin-top: 10px;
               `}

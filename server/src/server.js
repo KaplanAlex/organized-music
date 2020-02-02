@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import mongoose from "mongoose";
 import passport from "passport";
+import path from "path";
 
 import authRouter from "./routes/auth";
 import playlistRouter from "./routes/playlist";
@@ -26,9 +27,12 @@ app.use(express.urlencoded({ extended: true }));
 const allowCrossDomain = (req, res, next) => {
   // Allow access only from client, requiring credientals - allows
   // transmission of access token in cookie.
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL);
   res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,PUT,PATCH,POST,DELETE,OPTIONS"
+  );
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header(
     "Access-Control-Allow-Headers",
@@ -43,6 +47,9 @@ app.use(allowCrossDomain);
 app.use(cookieParser());
 passport.use(passportStrategy);
 
+app.use(express.static(path.resolve(__dirname, "../..", "client", "dist")));
+app.use("/static", express.static(path.join(__dirname, "../../client/static")));
+
 // Include routes
 app.use("/auth", authRouter(passport));
 app.use("/user", passport.authenticate("jwt", { session: false }), userRouter);
@@ -53,4 +60,9 @@ app.use(
   playlistRouter
 );
 
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.resolve(__dirname, "../..", "client", "dist", "index.html")
+  );
+});
 export default app;
