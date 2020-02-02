@@ -4,9 +4,13 @@
   "description": "Backend for organized music",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d dist --source-maps",
-    "dev": "nodemon -r dotenv/config index.js --exec babel-node",
-    "start": "node index.js src/index.js"
+    "dev": "nodemon -r dotenv/config ./server/index.js --exec babel-node",
+    "dev-start": "babel-node -r dotenv/config ./server/index.js",
+    "clean": "rm -rf public && mkdir public",
+    "build-babel": "babel -d ./public ./server",
+    "build": "npm run clean && npm install --only=dev && npm run build-babel",
+    "start": "npm run build && node ./public/index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "Alex Kaplan",
   "license": "ISC",
@@ -30,5 +34,19 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/node": "^7.0.0",
     "nodemon": "^2.0.2"
+  },
+  "now": {
+    "alias": "organized-music",
+    "name": "organized-music",
+    "env": {
+      "PORT": "8000",
+      "SECRET_PATH": "@secret_path",
+      "SPOTIFY_CLIENT_ID": "@spotify_client_id",
+      "SPOTIFY_CLIENT_SECRET": "@spotify_client_secret",
+      "MONGO_USER": "@mongo_user",
+      "MONGO_PASSWORD": "@mongo_password",
+      "SERVER_URL": "@server_url",
+      "CLIENT_URL": "@client_url"
+    }
   }
 }

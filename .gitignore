@@ -7,3 +7,4 @@ secrets
 *.key
 
 dist
+public

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --env.ENVIRONMENT=development --mode development",
-    "build": "webpack --env.ENVIRONMENT=production --mode production"
+    "build": "npm install --only=dev && webpack --config webpack.config-prod.js",
+    "build-local": "npm install --only=dev && webpack --env.ENVIRONMENT=production --mode production"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,5 @@
-import server from "./server/src/server";
+import polyfill from "@babel/polyfill";
+import server from "./src/server";
 
 const PORT = process.env.PORT || 5000;
 
