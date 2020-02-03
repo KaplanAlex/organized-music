@@ -73,6 +73,7 @@ export default passport => {
               if (user) {
                 // Update oauth tokens
                 user.spotifyAuth = spotifyAuth;
+                user.profileImage = profileResp.data.images[0];
                 user.save();
                 return user;
               }
@@ -93,10 +94,6 @@ export default passport => {
           });
       })
       .then(user => {
-        // const privateKey = fs.readFileSync(
-        //   `${process.env.SECRET_PATH}/jwt_private.key`,
-        //   "utf8"
-        // );
         const privateKey = process.env.JWT_PRIVATE_KEY.split("\\n").join("\n");
         const user_jwt = jwt.sign({ sub: user._id }, privateKey, {
           algorithm: "RS256"
