@@ -65,6 +65,8 @@ const ModalStyles = styled.div`
   align-items: stretch;
   width: 50%;
   height: 50%;
+  min-height: 600px;
+  min-width: 800px;
   border-radius: 5px;
 `;
 

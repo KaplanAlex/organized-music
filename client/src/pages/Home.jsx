@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { css } from "@emotion/core";
 import styled from "@emotion/styled";
 
 import PlaylistCard from "../components/PlaylistCard";
 import SearchBox from "../components/SearchBox";
+import UserContext from "../context/UserContext";
 
 const Home = () => {
   const [searchInput, setSearchInput] = useState("");
+
+  // Retreive user object to extract playlists and tags
+  const { user } = useContext(UserContext);
+
+  const { playlists, tags } = user;
+
   const handleSearchChange = e => {
     const { value } = e.target;
     setSearchInput(value);
@@ -30,11 +37,15 @@ const Home = () => {
         />
       </div>
       <Flex>
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
+        {playlists.map(playlist => (
+          <PlaylistCard
+            key={playlist.spotifyId}
+            id={playlist.spotifyId}
+            name={playlist.name}
+            description={playlist.description}
+            img={playlist.image}
+          />
+        ))}
       </Flex>
     </div>
   );

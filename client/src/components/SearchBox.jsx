@@ -89,6 +89,11 @@ const StyledClear = styled.button`
   background-color: transparent;
   border: 0;
   padding: 0;
+
+  &:focus {
+    outline: none;
+  }
+  cursor: pointer;
 `;
 
 SearchBox.defaultProps = {

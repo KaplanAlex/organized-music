@@ -36,27 +36,31 @@ router.post("/tags", (req, res) => {
   tag = JSON.parse(tag);
   playlistInfo = JSON.parse(playlistInfo);
 
-  console.log(tag);
-  console.log(playlistInfo);
-
   // If only the value is passed, the tag is new.
   if (!tag._id) {
-    console.log("Creating tag");
     const createResp = createTag(user, tag);
     if (createResp.err) {
       return res.status(400).send(createResp.err);
     }
 
-    // The created tag was saved to the user. Update the reference.
+    // The created tag was added to the user. Update the reference.
     user = createResp.user;
     tag = createResp.newTag;
-    console.log("after tag creation", user, tag);
   }
 
   // Add the tag to the playlist. Save the playlist if it's new
-  tagPlaylist(user, tag, playlistInfo).then(updatedPlaylist =>
-    res.send(updatedPlaylist)
-  );
+  tagPlaylist(user, tag, playlistInfo).then(updatedPlaylist => {
+    // Save the user - must be done after all transactions
+    updatedPlaylist.user.save();
+
+    // Catch duplicate assignment.
+    if (updatedPlaylist.err) {
+      return res.status(400).send(updatedPlaylist);
+    }
+
+    // Return the updated user and new playlist to the client
+    res.send(updatedPlaylist);
+  });
 });
 
 export default router;

@@ -18,9 +18,7 @@ export const transformSpotifyPlaylists = async spotifyPlaylists => {
       item.tags = {};
       return Playlist.findOne({ spotifyId: item.id })
         .then(result => {
-          // Found result
           if (result) {
-            console.log("found result", result);
             item.tags = result.tags;
             item.internal = true;
           }
@@ -37,23 +35,34 @@ export const transformSpotifyPlaylists = async spotifyPlaylists => {
 /**
  * Save a tag to playlist with matching spotifyId. Save the playlist
  * if it is not yet associated with the user.
+ *
+ * Save the user after calling this function! Calling within can lead to
+ * multiple saves which causes a mongodb error.
  * @param {User} user      - User following mongo user model.
  * @param {Tag} tag       - Tag to associate with the playlist.
  * @param {String} spotifyId - Id corresponding to a playlist on spotify.
  *
  */
 export const tagPlaylist = async (user, tag, playlistInfo) => {
-  // const { tags, playlists } = user;
   const { spotifyId, name } = playlistInfo;
-  console.log("Starting tagging, will return promise");
+
   return Playlist.findOne({ spotifyId, creatorId: user._id }).then(playlist => {
     if (playlist) {
-      console.log("Old playlist");
+      const dupTag =
+        playlist.tags.filter(pTag => pTag._id == tag._id).length > 0;
+
+      if (dupTag) {
+        return {
+          user,
+          err: "This tag is already associated with this playlist"
+        };
+      }
+
+      // Add the tag.
       playlist.tags.push(tag);
       playlist.save();
       return { user, playlist };
     } else {
-      console.log("New Playlist");
       // Save the playlist
       const newPlaylist = new Playlist({
         name,
@@ -61,13 +70,11 @@ export const tagPlaylist = async (user, tag, playlistInfo) => {
         creatorId: user._id,
         tags: [tag]
       });
-      console.log("Saving newplaylist");
+
       newPlaylist.save();
       user.playlists.push(newPlaylist);
-      console.log("Saving User from playlist");
-      user.save();
 
-      return { user, newPlaylist };
+      return { user, playlist: newPlaylist };
     }
   });
 };

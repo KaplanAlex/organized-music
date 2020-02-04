@@ -17,6 +17,7 @@ const PlaylistDetailModal = ({
   const [searchInput, setSearchInput] = useState("");
   const [showTagList, setShowTagList] = useState(false);
   const [tagOptions, setTagOptions] = useState([]);
+
   // Retreive user object to extract tags
   const { user } = useContext(UserContext);
   const { tags: userTags } = user;
@@ -24,20 +25,46 @@ const PlaylistDetailModal = ({
   // Only show unused tags
   const availableTags = userTags.filter(tag => tags.indexOf(tag.value) == -1);
 
+  // Manage search input text change.
+  useEffect(() => {
+    // Filter tags based on search input
+    var filteredTags = availableTags.filter(
+      tag => tag.value.toLowerCase().indexOf(searchInput.toLowerCase()) !== -1
+    );
+
+    // Present "Create Tag" as an option when the input doesn't exactly match a tag value.
+    const exactMatch =
+      filteredTags.filter(tag => tag.value.toLowerCase() === searchInput)
+        .length > 0;
+
+    if (!exactMatch) {
+      const newTag = {
+        value: `Create \"${searchInput}\"`,
+        id: null,
+        realValue: searchInput
+      };
+      filteredTags.push(newTag);
+    }
+
+    setTagOptions(filteredTags);
+  }, [searchInput, setTagOptions]);
+
   const handleSearchChange = e => {
     const { value } = e.target;
     setSearchInput(value);
-
-    // Filter displayed options
-    setTagOptions(
-      availableTags.filter(
-        tag => tag.value.toLowerCase().indexOf(value.toLowerCase()) !== -1
-      )
-    );
   };
 
-  const handleSearchClear = () => {
-    setSearchInput("");
+  const handleTagSelect = tag => {
+    // null id signifies "Create" tag
+    var currTag = tag;
+    if (tag._id === null) {
+      currTag = { value: tag.realValue, id: null };
+    }
+
+    // Set tag - DB
+    tagPlaylist(currTag, { name: name, spotifyId: id });
+
+    // TODO dimiss and show tag locally or spinner
   };
 
   const handleEnter = e => {
@@ -45,7 +72,7 @@ const PlaylistDetailModal = ({
 
     // Catch enter key press
     if (e.keyCode == 13) {
-      console.log("Submited", e.target.value);
+      console.log("Submited", value);
       tagPlaylist({ value: "98th Tag" }, { name: name, spotifyId: id });
     }
   };
@@ -76,7 +103,7 @@ const PlaylistDetailModal = ({
         <SearchBox
           value={searchInput}
           onChange={handleSearchChange}
-          onClear={handleSearchClear}
+          onClear={() => setSearchInput("")}
           placeholder={"Add a tag"}
           roundTopOnly={showTagList && tagOptions.length}
           onfocus={() => setShowTagList(true)}
@@ -87,7 +114,7 @@ const PlaylistDetailModal = ({
           {showTagList &&
             tagOptions.map(tag => {
               return (
-                <div key={tag._id} onClick={() => console.log(tag.value)}>
+                <div key={tag.value} onClick={() => handleTagSelect(tag)}>
                   <Divider />
                   <SearchListItem>{tag.value}</SearchListItem>
                 </div>

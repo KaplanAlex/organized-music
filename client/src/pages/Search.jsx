@@ -34,7 +34,6 @@ const Search = () => {
     setLoading(true);
     searchSpotifyPlaylists(searchVal)
       .then(data => {
-        console.log("Data in component", data);
         setDisplayData(data.playlists);
         setNextOffset(data.nextOffset);
         setTotal(data.total);

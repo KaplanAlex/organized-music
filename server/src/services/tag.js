@@ -1,6 +1,11 @@
 import Tag from "../models/Tag";
-import User from "../models/User";
 
+/**
+ * Create a tag and associate it with the  user.
+ *
+ * Save the user after calling this function! Calling within can lead to
+ * multiple saves which causes a mongodb error.
+ */
 export const createTag = (user, tag) => {
   const { tags } = user;
 
@@ -19,8 +24,6 @@ export const createTag = (user, tag) => {
 
   tags.push(newTag);
   user.tags = tags;
-  console.log("saving tag user");
-  user.save();
 
   return { newTag, user };
 };

@@ -9,7 +9,6 @@ const Navbar = ({ user, navButtons }) => {
 
   const showSettings = event => {
     // event.preventDefault();
-    console.log("in clicked");
     setSettingsOpen(true);
     document.addEventListener("click", hideSettings);
   };
@@ -64,7 +63,6 @@ const Navbar = ({ user, navButtons }) => {
               src={profileImg}
               onClick={e => {
                 showSettings(e);
-                console.log("clicked");
               }}
             />
           </ImgBox>

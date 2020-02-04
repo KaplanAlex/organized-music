@@ -32,6 +32,9 @@ router.post("/", (req, res) => {
     return res.status(400).send({ err: newTag.err });
   }
 
+  // Save updated user - must take place after all transactions.
+  newTag.user.save();
+
   // Return newTag object and updated user to the client
   res.status(200).send(newTag);
 });

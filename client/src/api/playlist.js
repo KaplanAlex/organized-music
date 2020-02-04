@@ -12,10 +12,15 @@ export const tagPlaylist = (tag, playlistInfo) => {
       playlistInfo
     )}`,
     withCredentials: true
-  }).catch(error => {
-    console.log("Error setting tag");
-    if (error.response.data) {
-      console.log(error.response.data);
-    }
-  });
+  })
+    .then(resp => {
+      const { user, playlist } = resp.data;
+      console.log("Updated user", user, "updated playlist", playlist);
+    })
+    .catch(error => {
+      console.log("Error setting tag");
+      if (error.response.data) {
+        console.log(error.response.data);
+      }
+    });
 };
