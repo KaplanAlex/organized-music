@@ -17,7 +17,7 @@ export const tagPlaylist = (tag, playlist) => {
   })
     .then(resp => {
       const { user, playlist } = resp.data;
-      console.log("Updated user", user, "updated playlist", playlist);
+      return { updatedUser: user, updatedPlaylist: playlist };
     })
     .catch(error => {
       console.log("Error setting tag");

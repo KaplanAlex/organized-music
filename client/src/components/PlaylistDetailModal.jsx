@@ -14,7 +14,7 @@ const PlaylistDetailModal = ({ open, closeModal, playableImage, playlist }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   // Retreive user object to extract tags
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { tags: userTags } = user;
 
   // Only show unused tags
@@ -35,7 +35,7 @@ const PlaylistDetailModal = ({ open, closeModal, playableImage, playlist }) => {
     if (!exactMatch) {
       const newTag = {
         value: `Create \"${searchInput}\"`,
-        id: null,
+        _id: null,
         realValue: searchInput
       };
       filteredTags.push(newTag);
@@ -53,11 +53,14 @@ const PlaylistDetailModal = ({ open, closeModal, playableImage, playlist }) => {
     // null id signifies "Create" tag
     var currTag = tag;
     if (tag._id === null) {
-      currTag = { value: tag.realValue, id: null };
+      currTag = { value: tag.realValue, _id: null };
     }
 
     // Set tag - DB
-    tagPlaylist(currTag, playlist);
+    tagPlaylist(currTag, playlist).then(tagResp => {
+      const { updatedUser, updatedPlaylist } = tagResp;
+      setUser(updatedUser);
+    });
 
     // TODO dimiss and show tag locally or spinner
   };
