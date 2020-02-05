@@ -8,7 +8,15 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  description: {
+    type: String,
+    default: ""
+  },
   spotifyId: {
+    type: String,
+    required: true
+  },
+  imageURL: {
     type: String,
     required: true
   },

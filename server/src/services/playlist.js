@@ -2,6 +2,28 @@ import Playlist from "../models/Playlist";
 import User from "../models/User";
 
 /**
+ * Convert external playlist object to excepted form.
+ * @param {*} playlist - Playlist object from spotify api
+ */
+export const formatSpotifyPlaylist = playlist => ({
+  name: playlist.name,
+  description: playlist.description,
+  spotifyId: playlist.id,
+  imageURL: playlist.images.length > 0 ? playlist.images[0].url : null,
+  tags: [],
+  internal: false
+});
+
+export const formatInteralPlaylist = playlist => ({
+  name: playlist.name,
+  description: playlist.description,
+  spotifyId: playlist.spotifyId,
+  imageURL: playlist.imageURL,
+  tags: playlist.tags,
+  internal: true
+});
+
+/**
  * Transform received playlist objects from spotify to internal format.
  * Remove extraneous information and map to interal representation of
  * the playlist containing tags (if it exists).
@@ -10,20 +32,17 @@ import User from "../models/User";
 export const transformSpotifyPlaylists = async spotifyPlaylists => {
   const playlists = await Promise.all(
     spotifyPlaylists.map(item => {
-      // Pull out the relevant image
-      item.image = item.images.length > 0 ? item.images[0].url : null;
+      const formatted = formatSpotifyPlaylist(item);
 
       // Lookup the playlist
-      item.interal = false;
-      item.tags = {};
-      return Playlist.findOne({ spotifyId: item.id })
+      return Playlist.findOne({ spotifyId: formatted.spotifyId })
         .then(result => {
           if (result) {
-            item.tags = result.tags;
-            item.internal = true;
+            formatted.tags = result.tags;
+            formatted.internal = true;
           }
 
-          return item;
+          return formatted;
         })
         .catch(err => console.log("MongoDB Playlist lookup error", err));
     })
@@ -44,7 +63,7 @@ export const transformSpotifyPlaylists = async spotifyPlaylists => {
  *
  */
 export const tagPlaylist = async (user, tag, playlistInfo) => {
-  const { spotifyId, name } = playlistInfo;
+  const { spotifyId, name, description, imageURL } = playlistInfo;
 
   return Playlist.findOne({ spotifyId, creatorId: user._id }).then(playlist => {
     if (playlist) {
@@ -60,13 +79,26 @@ export const tagPlaylist = async (user, tag, playlistInfo) => {
 
       // Add the tag.
       playlist.tags.push(tag);
+
+      // Update fields - Minor improvement on stale data
+      playlist.name = name;
+      playlist.description = description;
+      playlist.imageURL = imageURL;
       playlist.save();
-      return { user, playlist };
+
+      // Update playlist in user.
+      user.playlists = user.playlists.filter(p => p.spotifyId != spotifyId);
+      user.playlists.push(playlist);
+
+      const formattedPlaylist = formatInteralPlaylist(playlist);
+      return { user, playlist: formattedPlaylist };
     } else {
       // Save the playlist
       const newPlaylist = new Playlist({
         name,
+        description,
         spotifyId,
+        imageURL,
         creatorId: user._id,
         tags: [tag]
       });
@@ -74,7 +106,7 @@ export const tagPlaylist = async (user, tag, playlistInfo) => {
       newPlaylist.save();
       user.playlists.push(newPlaylist);
 
-      return { user, playlist: newPlaylist };
+      return { user, playlist: formatInteralPlaylist(newPlaylist) };
     }
   });
 };

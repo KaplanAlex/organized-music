@@ -7,14 +7,16 @@ import Tag from "./Tag";
 import PlaylistDetailModal from "./PlaylistDetailModal";
 import { playSpotifyPlaylist } from "../api/spotify";
 
-const PlaylistCard = ({ id, name, description, img }) => {
-  const [tags, setTags] = useState(["rap"]);
+const PlaylistCard = ({ playlist }) => {
+  const { spotifyId: id, name, description, imageURL, tags } = playlist;
+
+  const [playlistTags, setplaylistTags] = useState(["rap"]);
   const [modalOpen, setModalOpen] = useState(false);
   const filteredName = name || "No Name";
   const filteredDescription = description || "No description";
 
   const clearTag = idx => {
-    setTags(tags.filter(t => tags.indexOf(t) !== idx));
+    setplaylistTags(playlistTags.filter(t => playlistTags.indexOf(t) !== idx));
   };
 
   const handlePlayClick = () => {
@@ -31,7 +33,7 @@ const PlaylistCard = ({ id, name, description, img }) => {
 
   const PlayableImage = (
     <ImageContainer>
-      <StyledImage src={img} />
+      <StyledImage src={imageURL} />
       <ImageOverlay>
         <PlayButton onClick={handlePlayClick}>
           <StyledPlayCircle />
@@ -49,8 +51,8 @@ const PlaylistCard = ({ id, name, description, img }) => {
           <StyledDescription>{filteredDescription}</StyledDescription>
         </StyledText>
         <TagDiv>
-          {!tags.length && "Add a tag to start organizing!"}
-          {tags.map((tag, index) => (
+          {!playlistTags.length && "Add a tag to start organizing!"}
+          {playlistTags.map((tag, index) => (
             <Tag key={index} value={tag} onClear={() => clearTag(index)} />
           ))}
           <PlusButton onClick={openModal}>
@@ -63,9 +65,7 @@ const PlaylistCard = ({ id, name, description, img }) => {
           open={modalOpen}
           closeModal={closeModal}
           playableImage={PlayableImage}
-          tags={tags}
-          id={id}
-          name={filteredName}
+          playlist={playlist}
         />
       )}
     </StyledCard>

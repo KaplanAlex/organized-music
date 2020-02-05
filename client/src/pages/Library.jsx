@@ -77,13 +77,7 @@ const Home = () => {
 
       <Flex>
         {displayData.map(playlist => (
-          <PlaylistCard
-            key={playlist.id}
-            id={playlist.id}
-            name={playlist.name}
-            description={playlist.description}
-            img={playlist.image}
-          />
+          <PlaylistCard key={playlist.spotifyId} playlist={playlist} />
         ))}
       </Flex>
       {loadMore && (

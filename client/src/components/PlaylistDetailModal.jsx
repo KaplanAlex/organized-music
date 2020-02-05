@@ -6,14 +6,9 @@ import Modal from "./Modal";
 import SearchBox from "./SearchBox";
 import { tagPlaylist } from "../api/playlist";
 
-const PlaylistDetailModal = ({
-  open,
-  closeModal,
-  playableImage,
-  tags,
-  name,
-  id
-}) => {
+const PlaylistDetailModal = ({ open, closeModal, playableImage, playlist }) => {
+  const { spotifyId: id, name, description, imageURL, tags } = playlist;
+  console.log(playlist);
   const [searchInput, setSearchInput] = useState("");
   const [showTagList, setShowTagList] = useState(false);
   const [tagOptions, setTagOptions] = useState([]);
@@ -62,7 +57,7 @@ const PlaylistDetailModal = ({
     }
 
     // Set tag - DB
-    tagPlaylist(currTag, { name: name, spotifyId: id });
+    tagPlaylist(currTag, playlist);
 
     // TODO dimiss and show tag locally or spinner
   };
@@ -97,7 +92,7 @@ const PlaylistDetailModal = ({
     <Modal open={open} closeModal={closeModal}>
       {playableImage}
       <div>Tags</div>
-      <div>{tags}</div>
+      <div>{tags.map(tag => tag.value)}</div>
 
       <TagSearch ref={tagListRef}>
         <SearchBox

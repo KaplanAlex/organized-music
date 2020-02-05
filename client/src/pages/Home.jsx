@@ -38,13 +38,7 @@ const Home = () => {
       </div>
       <Flex>
         {playlists.map(playlist => (
-          <PlaylistCard
-            key={playlist.spotifyId}
-            id={playlist.spotifyId}
-            name={playlist.name}
-            description={playlist.description}
-            img={playlist.image}
-          />
+          <PlaylistCard key={playlist.spotifyId} playlist={playlist} />
         ))}
       </Flex>
     </div>

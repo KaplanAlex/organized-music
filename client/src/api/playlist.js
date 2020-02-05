@@ -5,7 +5,9 @@ import axios from "axios";
  * @param {*} tag
  * @param {*} playlistInfo
  */
-export const tagPlaylist = (tag, playlistInfo) => {
+export const tagPlaylist = (tag, playlist) => {
+  const { spotifyId, name, description, imageURL } = playlist;
+  const playlistInfo = { spotifyId, name, description, imageURL };
   return axios(`${process.env.API_URL}/playlist/tags`, {
     method: "POST",
     data: `tag=${JSON.stringify(tag)}&playlistInfo=${JSON.stringify(
