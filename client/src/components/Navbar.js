@@ -1,21 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
+import SettingsModal from "./SettingsModal";
 
 const Navbar = ({ user, navButtons }) => {
+  const imageRef = useRef(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const profileImg = user.profileImage.url;
 
   const showSettings = event => {
-    // event.preventDefault();
-    setSettingsOpen(true);
-    document.addEventListener("click", hideSettings);
-  };
-
-  const hideSettings = event => {
-    setSettingsOpen(false);
-    document.removeEventListener("click", hideSettings);
+    setSettingsOpen(!settingsOpen);
   };
 
   return (
@@ -52,14 +47,15 @@ const Navbar = ({ user, navButtons }) => {
               </NavLink>
             ))}
           </div>
-          {settingsOpen ? (
-            <SettingsContainer>
-              <span>Settings</span>
-              <StyledButton>Logout</StyledButton>
-            </SettingsContainer>
-          ) : null}
+          {settingsOpen && (
+            <SettingsModal
+              closeModal={() => setSettingsOpen(false)}
+              imageRef={imageRef}
+            />
+          )}
           <ImgBox>
             <StyledProfileImg
+              ref={imageRef}
               src={profileImg}
               onClick={e => {
                 showSettings(e);
@@ -107,19 +103,4 @@ const StyledImg = styled.img`
 const StyledProfileImg = styled(StyledImg)`
   border-radius: 50%;
   cursor: pointer;
-`;
-
-const SettingsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  padding: 5px;
-  border-radius: 5px;
-`;
-
-const StyledButton = styled.button`
-  cursor: pointer;
-  &:focus {
-    outline: none;
-  }
 `;

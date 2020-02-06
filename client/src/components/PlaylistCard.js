@@ -6,7 +6,7 @@ import Card from "./Card";
 import Tag from "./Tag";
 import PlaylistDetailModal from "./PlaylistDetailModal";
 import { playSpotifyPlaylist } from "../api/spotify";
-import { TagSelector } from "./TagSelector";
+import TagSelector from "./TagSelector";
 
 const PlaylistCard = ({ playlist }) => {
   const { spotifyId: id, name, description, imageURL, tags } = playlist;

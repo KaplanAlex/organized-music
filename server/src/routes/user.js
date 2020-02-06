@@ -9,6 +9,11 @@ router.get("/", (req, res) => {
   return res.json({ user: req.user });
 });
 
+router.post("/logout", (req, res) => {
+  res.cookie("jwt", "", { maxAge: 0, httpOnly: true });
+  return res.send();
+});
+
 router.get("/playlists", (req, res) => {
   const { user, query } = req;
   const { offset } = query;

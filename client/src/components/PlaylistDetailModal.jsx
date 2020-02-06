@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 import UserContext from "../context/UserContext";
 import Modal from "./Modal";
-import { TagSelector } from "./TagSelector";
+import TagSelector from "./TagSelector";
 
 const PlaylistDetailModal = ({ open, closeModal, playableImage, playlist }) => {
   const { spotifyId: id, name, description, imageURL, tags } = playlist;
