@@ -78,7 +78,7 @@ export const tagPlaylist = async (user, tag, playlistInfo) => {
       }
 
       // Add the tag.
-      playlist.tags.push(tag);
+      playlist.tags.unshift(tag);
 
       // Update fields - Minor improvement on stale data
       playlist.name = name;
@@ -88,7 +88,7 @@ export const tagPlaylist = async (user, tag, playlistInfo) => {
 
       // Update playlist in user.
       user.playlists = user.playlists.filter(p => p.spotifyId != spotifyId);
-      user.playlists.push(playlist);
+      user.playlists.unshift(playlist);
 
       const formattedPlaylist = formatInteralPlaylist(playlist);
       return { user, playlist: formattedPlaylist };
@@ -104,7 +104,7 @@ export const tagPlaylist = async (user, tag, playlistInfo) => {
       });
 
       newPlaylist.save();
-      user.playlists.push(newPlaylist);
+      user.playlists.unshift(newPlaylist);
 
       return { user, playlist: formatInteralPlaylist(newPlaylist) };
     }

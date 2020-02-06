@@ -4,7 +4,7 @@
   "description": "Backend for organized music",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r dotenv/config ./server/index.js --exec babel-node",
+    "dev": "nodemon -r dotenv/config ./server/index.js --exec babel-node --ignore client",
     "dev-start": "babel-node -r dotenv/config ./server/index.js",
     "clean": "rm -rf public && mkdir public",
     "build-babel": "babel -d ./public ./server",

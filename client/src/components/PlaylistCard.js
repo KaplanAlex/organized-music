@@ -6,12 +6,16 @@ import Card from "./Card";
 import Tag from "./Tag";
 import PlaylistDetailModal from "./PlaylistDetailModal";
 import { playSpotifyPlaylist } from "../api/spotify";
+import { TagSelector } from "./TagSelector";
 
 const PlaylistCard = ({ playlist }) => {
   const { spotifyId: id, name, description, imageURL, tags } = playlist;
 
-  const [playlistTags, setplaylistTags] = useState(["rap"]);
+  console.log(tags);
+
+  const [playlistTags, setplaylistTags] = useState(tags);
   const [modalOpen, setModalOpen] = useState(false);
+  const [showTagSelector, setShowTagSelector] = useState(false);
   const filteredName = name || "No Name";
   const filteredDescription = description || "No description";
 
@@ -29,6 +33,10 @@ const PlaylistCard = ({ playlist }) => {
 
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const handlePlusClick = () => {
+    setShowTagSelector(true);
   };
 
   const PlayableImage = (
@@ -53,11 +61,12 @@ const PlaylistCard = ({ playlist }) => {
         <TagDiv>
           {!playlistTags.length && "Add a tag to start organizing!"}
           {playlistTags.map((tag, index) => (
-            <Tag key={index} value={tag} onClear={() => clearTag(index)} />
+            <Tag
+              key={index}
+              value={tag.value}
+              onClear={() => clearTag(index)}
+            />
           ))}
-          <PlusButton onClick={openModal}>
-            <StyledPlusCircle />
-          </PlusButton>
         </TagDiv>
       </StyledFlex>
       {modalOpen && (
@@ -67,6 +76,16 @@ const PlaylistCard = ({ playlist }) => {
           playableImage={PlayableImage}
           playlist={playlist}
         />
+      )}
+      <TagButtonWrapper>
+        <PlusButton onClick={handlePlusClick}>
+          <StyledPlusCircle />
+        </PlusButton>
+      </TagButtonWrapper>
+      {showTagSelector && (
+        <TagSelectorWrapper>
+          <TagSelector playlist={playlist} />
+        </TagSelectorWrapper>
       )}
     </StyledCard>
   );
@@ -121,6 +140,20 @@ const PlusButton = styled(InvisibleButton)`
       color: #7d7d7d;
     }
   }
+`;
+
+const TagSelectorWrapper = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  right: 0px;
+  bottom: 5px;
+`;
+
+const TagButtonWrapper = styled.div`
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
 `;
 
 const ImageOverlay = styled.div`
