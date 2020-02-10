@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { css } from "@emotion/core";
 import styled from "@emotion/styled";
+import BeatLoader from "react-spinners/BeatLoader";
 import debounce from "lodash/debounce";
 
 import { searchSpotifyPlaylists } from "../api/spotify";
@@ -105,12 +106,19 @@ const Search = () => {
         ))}
       </Flex>
       {moreResultsAvailable && (
-        <div>
-          <span>
+        <Flex
+          css={css`
+            margin-top: 20px;
+            width: 100%;
+            justify-content: center;
+          `}
+        >
+          <BeatLoader color={"#1ed760"} />
+          {/* <span>
             Showing {nextOffset} playlists of {total}
           </span>
-          <button onClick={loadMoreResults}>Load more playlists</button>
-        </div>
+          <button onClick={loadMoreResults}>Load more playlists</button> */}
+        </Flex>
       )}
     </div>
   );

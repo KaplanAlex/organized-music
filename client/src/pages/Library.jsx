@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { css } from "@emotion/core";
 import styled from "@emotion/styled";
+import BeatLoader from "react-spinners/BeatLoader";
 
 import { getSpotifyLibraryPlaylists } from "../api/spotify";
 
@@ -97,12 +98,19 @@ const Home = () => {
         ))}
       </Flex>
       {moreResultsAvailable && (
-        <div>
-          <span>
+        <Flex
+          css={css`
+            margin-top: 20px;
+            width: 100%;
+            justify-content: center;
+          `}
+        >
+          <BeatLoader color={"#1ed760"} />
+          {/* <span>
             Showing {nextOffset} playlists of {total}
           </span>
-          <button onClick={loadPlaylists}>Load more playlists</button>
-        </div>
+          <button onClick={loadPlaylists}>Load more playlists</button> */}
+        </Flex>
       )}
     </div>
   );
