@@ -76,7 +76,11 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div
+      css={css`
+        min-height: 100vh;
+      `}
+    >
       <h1>Library</h1>
       <div
         css={css`
@@ -90,6 +94,15 @@ const Home = () => {
           onChange={handleSearchChange}
           onClear={handleSearchClear}
         />
+
+        {moreResultsAvailable && (
+          <div>
+            <span>
+              Showing {nextOffset} playlists of {total}
+            </span>
+            <button onClick={loadPlaylists}>Load more playlists</button>
+          </div>
+        )}
       </div>
 
       <Flex>
@@ -97,20 +110,10 @@ const Home = () => {
           <PlaylistCard key={playlist.spotifyId} playlist={playlist} />
         ))}
       </Flex>
-      {moreResultsAvailable && (
-        <Flex
-          css={css`
-            margin-top: 20px;
-            width: 100%;
-            justify-content: center;
-          `}
-        >
+      {loading && (
+        <CenteredLoader>
           <BeatLoader color={"#1ed760"} />
-          {/* <span>
-            Showing {nextOffset} playlists of {total}
-          </span>
-          <button onClick={loadPlaylists}>Load more playlists</button> */}
-        </Flex>
+        </CenteredLoader>
       )}
     </div>
   );
@@ -122,6 +125,12 @@ const Flex = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
+`;
+
+const CenteredLoader = styled(Flex)`
+  margin-top: 20px;
+  width: 100%;
+  justify-content: center;
 `;
 
 export default Home;

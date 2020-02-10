@@ -105,7 +105,7 @@ const Search = () => {
           <PlaylistCard key={playlist.id} playlist={playlist} />
         ))}
       </Flex>
-      {moreResultsAvailable && (
+      {loadingMore && (
         <Flex
           css={css`
             margin-top: 20px;
@@ -114,10 +114,6 @@ const Search = () => {
           `}
         >
           <BeatLoader color={"#1ed760"} />
-          {/* <span>
-            Showing {nextOffset} playlists of {total}
-          </span>
-          <button onClick={loadMoreResults}>Load more playlists</button> */}
         </Flex>
       )}
     </div>

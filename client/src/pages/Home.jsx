@@ -23,10 +23,15 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div
+      css={css`
+        min-height: 100vh;
+      `}
+    >
       <h1>Home</h1>
       <div
         css={css`
+          padding-top: 15px;
           padding-bottom: 15px;
           flex: 1;
         `}
