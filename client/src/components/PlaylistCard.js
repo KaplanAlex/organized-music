@@ -11,8 +11,6 @@ import TagSelector from "./TagSelector";
 const PlaylistCard = ({ playlist }) => {
   const { spotifyId: id, name, description, imageURL, tags } = playlist;
 
-  console.log(tags);
-
   const [playlistTags, setplaylistTags] = useState(tags);
   const [modalOpen, setModalOpen] = useState(false);
   const [showTagSelector, setShowTagSelector] = useState(false);

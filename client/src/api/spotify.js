@@ -44,5 +44,6 @@ export const searchSpotifyPlaylists = (playlistName, offset) => {
     .get(query, {
       withCredentials: true
     })
-    .then(playlistResp => playlistResp.data);
+    .then(playlistResp => playlistResp.data)
+    .catch(err => console.log("Error searching playlists", err));
 };

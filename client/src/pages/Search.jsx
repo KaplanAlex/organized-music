@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { css } from "@emotion/core";
 import styled from "@emotion/styled";
+import debounce from "lodash/debounce";
 
 import { searchSpotifyPlaylists } from "../api/spotify";
 
@@ -15,8 +16,27 @@ const Search = () => {
   const [displayData, setDisplayData] = useState([]);
   const [nextOffset, setNextOffset] = useState(0);
   const [total, setTotal] = useState(0);
+  const [moreResultsAvailable, setMoreResultsAvailable] = useState(false);
 
-  const loadMore = nextOffset < total;
+  useEffect(() => {
+    document.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, [loading, loadingMore, moreResultsAvailable]);
+
+  // Must be recreated when the values of loading and moreResultsAvailable are updated.
+  const handleScroll = () => {
+    if (loading || loadingMore || !moreResultsAvailable) return;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      loadMoreResults();
+    }
+  };
 
   const handleSearchChange = e => {
     const { value } = e.target;
@@ -39,27 +59,23 @@ const Search = () => {
         setDisplayData(data.playlists);
         setNextOffset(data.nextOffset);
         setTotal(data.total);
-      })
-      .catch(err => {
-        console.log("Load playlist error in Search.jsx", err);
+        setMoreResultsAvailable(data.nextOffset < data.total);
       })
       .then(() => {
         setLoading(false);
       });
   };
 
+  // extend the current set of results
   const loadMoreResults = () => {
     setLoadingMore(true);
 
-    // extend the current set of results
     searchSpotifyPlaylists(searchInput, nextOffset)
       .then(data => {
         setDisplayData(displayData.concat(data.playlists));
         setNextOffset(data.nextOffset);
         setTotal(data.total);
-      })
-      .catch(err => {
-        console.log("Load more playlists error in Search.jsx", err);
+        setMoreResultsAvailable(data.nextOffset < data.total);
       })
       .then(() => {
         setLoadingMore(false);
@@ -88,7 +104,7 @@ const Search = () => {
           <PlaylistCard key={playlist.id} playlist={playlist} />
         ))}
       </Flex>
-      {loadMore && (
+      {moreResultsAvailable && (
         <div>
           <span>
             Showing {nextOffset} playlists of {total}

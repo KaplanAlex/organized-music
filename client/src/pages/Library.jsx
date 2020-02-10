@@ -15,11 +15,29 @@ const Home = () => {
   const [displayData, setDisplayData] = useState([]);
   const [nextOffset, setNextOffset] = useState(0);
   const [total, setTotal] = useState(0);
-
-  const loadMore = nextOffset < total;
+  const [moreResultsAvailable, setMoreResultsAvailable] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    document.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, [loading, moreResultsAvailable]);
+
+  // Must be recreated when the values of loading and moreResultsAvailable are updated.
+  const handleScroll = () => {
+    if (loading || !moreResultsAvailable) return;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      loadPlaylists();
+    }
+  };
+
+  useEffect(() => {
     loadPlaylists();
   }, []);
 
@@ -49,9 +67,7 @@ const Home = () => {
         setPlaylistData(playlistData.concat(data.playlists));
         setNextOffset(data.nextOffset);
         setTotal(data.total);
-      })
-      .catch(err => {
-        console.log("Load playlist error in Library.jsx", err);
+        setMoreResultsAvailable(data.nextOffset < data.total);
       })
       .then(() => {
         setLoading(false);
@@ -80,7 +96,7 @@ const Home = () => {
           <PlaylistCard key={playlist.spotifyId} playlist={playlist} />
         ))}
       </Flex>
-      {loadMore && (
+      {moreResultsAvailable && (
         <div>
           <span>
             Showing {nextOffset} playlists of {total}
