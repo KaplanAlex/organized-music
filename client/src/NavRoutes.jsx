@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
 import navButtons from "./config/navButtons";
@@ -17,9 +18,9 @@ const NavRoutes = ({ user }) => {
     >
       <Router>
         <Navbar user={user} navButtons={navButtons} />
+        <FullScreenBackground />
         <div
           css={css`
-            background-color: #f3f3f3;
             padding: 25px 25px 25px 150px;
             display: flex;
             flex: 1;
@@ -47,5 +48,15 @@ const NavRoutes = ({ user }) => {
     </div>
   );
 };
+
+const FullScreenBackground = styled.div`
+  background-color: #f3f3f3;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  z-index: -1;
+`;
 
 export default NavRoutes;
