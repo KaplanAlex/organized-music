@@ -42,10 +42,10 @@ router.get("/playlists", (req, res) => {
 
 router.get("/search", (req, res) => {
   const { user, query } = req;
-  const { name, types } = query;
+  const { name, types, offset } = query;
 
   const baseURL = "https://api.spotify.com/v1/search";
-  const q = `${name}&type=${types}`;
+  const q = `${name}&type=${types}&offset=${offset}`;
 
   spotifyReq(
     {

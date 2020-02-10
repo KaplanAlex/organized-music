@@ -34,10 +34,11 @@ export const playSpotifyPlaylist = playlistId => {
  * Search spotify for a playlist matching the input name.
  * @param {*} playlistName - Playlist name to match.
  */
-export const searchSpotifyPlaylists = playlistName => {
+export const searchSpotifyPlaylists = (playlistName, offset) => {
   const baseURL = process.env.API_URL;
   const route = "/user/search";
-  const params = `?name=${playlistName}&types=playlist`;
+  const params = `?name=${playlistName}&types=playlist&offset=${offset}`;
+
   const query = baseURL + route + params;
   return axios
     .get(query, {

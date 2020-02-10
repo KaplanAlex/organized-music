@@ -11,6 +11,7 @@ const Search = () => {
   const [searchInput, setSearchInput] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [displayData, setDisplayData] = useState([]);
   const [nextOffset, setNextOffset] = useState(0);
   const [total, setTotal] = useState(0);
@@ -32,7 +33,8 @@ const Search = () => {
   // Manage search here to potentially throttle requests in the future
   const searchPlaylists = searchVal => {
     setLoading(true);
-    searchSpotifyPlaylists(searchVal)
+    // Reset offset and search with the new, provided input
+    searchSpotifyPlaylists(searchVal, 0)
       .then(data => {
         setDisplayData(data.playlists);
         setNextOffset(data.nextOffset);
@@ -43,6 +45,24 @@ const Search = () => {
       })
       .then(() => {
         setLoading(false);
+      });
+  };
+
+  const loadMoreResults = () => {
+    setLoadingMore(true);
+
+    // extend the current set of results
+    searchSpotifyPlaylists(searchInput, nextOffset)
+      .then(data => {
+        setDisplayData(displayData.concat(data.playlists));
+        setNextOffset(data.nextOffset);
+        setTotal(data.total);
+      })
+      .catch(err => {
+        console.log("Load more playlists error in Search.jsx", err);
+      })
+      .then(() => {
+        setLoadingMore(false);
       });
   };
 
@@ -73,9 +93,7 @@ const Search = () => {
           <span>
             Showing {nextOffset} playlists of {total}
           </span>
-          <button onClick={() => console.log("Load more!")}>
-            Load more playlists
-          </button>
+          <button onClick={loadMoreResults}>Load more playlists</button>
         </div>
       )}
     </div>
